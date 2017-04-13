@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.up.cs301.blokus.BlokusMainActivity"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1520px">
+
+        <LinearLayout
+            android:id="@+id/boardLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FF0000FF"
+            android:weightSum="1">
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/helpRotate"
+            android:text="Rotate Button: Press to rotate selected piece 90 degrees clockwise"
+            android:textSize="75sp"
+            android:textColor="#FFFFFF"
+            android:background="#AA000000"
+            android:visibility="invisible"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="Confirm Button: Press to confirm placement of piece"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/helpConfirm"
+            android:textSize="75sp"
+            android:textColor="#FFFFFF"
+            android:background="#AA000000"
+            android:visibility="invisible" />
+
+        <TextView
+            android:text="Flip Button: Press to flip selected piece across horizontal axis"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="#FFFFFF"
+            android:background="#AA000000"
+            android:id="@+id/helpFlip"
+            android:visibility="invisible"
+            android:textSize="75sp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/inputLayout">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="310px"
+            android:id="@+id/previewLayout"
+            android:layout_width="310px"></LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/pieceScrollView"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/pieceLayout">
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_I1"
+                        android:layout_weight="1"
+                        android:src="@drawable/p1"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"
+                        android:cropToPadding="false" />
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_I2"
+                        android:layout_weight="1"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/p2"
+                        android:background="@drawable/button_border"
+                        android:adjustViewBounds="true" />
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_V3"
+                        android:layout_weight="1"
+                        android:src="@drawable/p3"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_I3"
+                        android:layout_weight="1"
+                        android:src="@drawable/p4"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_O4"
+                        android:layout_weight="1"
+                        android:src="@drawable/p5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_T4"
+                        android:layout_weight="1"
+                        android:src="@drawable/p6"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_I4"
+                        android:layout_weight="1"
+                        android:src="@drawable/p7"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_L4"
+                        android:layout_weight="1"
+                        android:src="@drawable/p8"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_Z4"
+                        android:layout_weight="1"
+                        android:src="@drawable/p9"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_L5"
+                        android:layout_weight="1"
+                        android:src="@drawable/p10"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_T"
+                        android:layout_weight="1"
+                        android:src="@drawable/p11"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_Y"
+                        android:layout_weight="1"
+                        android:src="@drawable/p12"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_X"
+                        android:layout_weight="1"
+                        android:src="@drawable/p13"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_U"
+                        android:layout_weight="1"
+                        android:src="@drawable/p14"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_W"
+                        android:layout_weight="1"
+                        android:src="@drawable/p15"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_P"
+                        android:layout_weight="1"
+                        android:src="@drawable/p16"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_I5"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_border"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/p17" />
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_Z5"
+                        android:layout_weight="1"
+                        android:src="@drawable/p18"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_N"
+                        android:layout_weight="1"
+                        android:src="@drawable/p19"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_V5"
+                        android:layout_weight="1"
+                        android:src="@drawable/p20"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                    <edu.up.cs301.blokus.PieceButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/piece_F"
+                        android:layout_weight="1"
+                        android:src="@drawable/p21"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/button_border"/>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:id="@+id/pieceControlLayout"
+                android:layout_weight="3">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Confirm"
+                    android:id="@+id/ConfirmButton"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="Rotate"
+                    android:id="@+id/rotateButton"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="Flip"
+                    android:id="@+id/flipButton"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
