@@ -77,7 +77,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     public void receiveInfo(GameInfo info) {
         if (info instanceof BlokusGameState)
         {
-            enablePlayerInput();
+            //enablePlayerInput();
             newState = (BlokusGameState)info;
 
             if (newState.getBoardState() != null) {
@@ -98,13 +98,15 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             updateConfirmButton();
         }
 
+        /*
         if (info instanceof NotYourTurnInfo)
         {
-            disablePlayerInput();
+            //disablePlayerInput();
             confirmButton.setBackgroundColor(Color.RED);
             rotateButton.setBackgroundColor(Color.RED);
             flipButton.setBackgroundColor(Color.RED);
         }
+        */
     }
 
     private void enablePlayerInput()
