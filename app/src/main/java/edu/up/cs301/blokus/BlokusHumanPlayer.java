@@ -97,7 +97,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             flipButton.setBackgroundColor(Color.YELLOW);
             updateConfirmButton();
         }
-        else if (info instanceof NotYourTurnInfo)
+
+        if (info instanceof NotYourTurnInfo)
         {
             disablePlayerInput();
             confirmButton.setBackgroundColor(Color.RED);
