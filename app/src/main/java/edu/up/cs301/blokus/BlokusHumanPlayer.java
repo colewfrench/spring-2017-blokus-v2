@@ -24,6 +24,7 @@ import edu.up.cs301.game.GameHumanPlayer;
 import edu.up.cs301.game.GameMainActivity;
 import edu.up.cs301.game.R;
 import edu.up.cs301.game.infoMsg.GameInfo;
+import edu.up.cs301.game.infoMsg.NotYourTurnInfo;
 
 
 /**
@@ -76,34 +77,86 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     public void receiveInfo(GameInfo info) {
         if (info instanceof BlokusGameState)
         {
+            enablePlayerInput();
             newState = (BlokusGameState)info;
 
             if (newState.getBoardState() != null) {
                 updateGUIBoard();
             }
 
-            if (newState.getPlayerTurn() == playerNum)
-            {
-                this.previewBoard = newState.getPiecePreview();
-                this.selectedPiece = newState.getSelectedPiece();
+            this.previewBoard = newState.getPiecePreview();
+            this.selectedPiece = newState.getSelectedPiece();
 
-                if (previewBoard != null) {
-                    updatePreviewBoard();
-                }
-
-                updatePieceButtons();
-
-                rotateButton.setBackgroundColor(Color.YELLOW);
-                flipButton.setBackgroundColor(Color.YELLOW);
-                updateConfirmButton();
+            if (previewBoard != null) {
+                updatePreviewBoard();
             }
-            else
+
+            updatePieceButtons();
+
+            rotateButton.setBackgroundColor(Color.YELLOW);
+            flipButton.setBackgroundColor(Color.YELLOW);
+            updateConfirmButton();
+        }
+        else if (info instanceof NotYourTurnInfo)
+        {
+            disablePlayerInput();
+            confirmButton.setBackgroundColor(Color.RED);
+            rotateButton.setBackgroundColor(Color.RED);
+            flipButton.setBackgroundColor(Color.RED);
+        }
+    }
+
+    private void enablePlayerInput()
+    {
+        setBoardListeners(new BlokButtonListener());
+        setPieceListeners(new PieceButtonListener());
+        setPreviewListeners(new BlokButtonListener());
+        setControlListeners(new PieceControlListener());
+    }
+
+    private void disablePlayerInput()
+    {
+        setBoardListeners(null);
+        setPieceListeners(null);
+        setPreviewListeners(null);
+        setControlListeners(null);
+    }
+
+    private void setBoardListeners(View.OnClickListener l)
+    {
+        for (int i = 0; i < BOARD_SIZE; i++)
+        {
+            for (int j = 0; j < BOARD_SIZE; j++)
             {
-                confirmButton.setBackgroundColor(Color.RED);
-                rotateButton.setBackgroundColor(Color.RED);
-                flipButton.setBackgroundColor(Color.RED);
+                boardButtons[i][j].setOnClickListener(l);
             }
         }
+    }
+
+    private void setPieceListeners(View.OnClickListener l)
+    {
+        for (int i = 0; i < pieceButtons.length; i++)
+        {
+            pieceButtons[i].setOnClickListener(null);
+        }
+    }
+
+    private void setPreviewListeners(View.OnClickListener l)
+    {
+        for (int i = 0; i < PREVIEW_BOARD_SIZE; i++)
+        {
+            for (int j = 0; j < PREVIEW_BOARD_SIZE; j++)
+            {
+                displayButtons[i][j].setOnClickListener(l);
+            }
+        }
+    }
+
+    private void setControlListeners(View.OnClickListener l)
+    {
+        confirmButton.setOnClickListener(l);
+        rotateButton.setOnClickListener(l);
+        flipButton.setOnClickListener(l);
     }
 
     public void setAsGui(GameMainActivity activity) {
