@@ -15,6 +15,7 @@ import edu.up.cs301.blokus.actions.SelectPieceTemplateAction;
 import edu.up.cs301.blokus.actions.SelectValidBlokOnBoardAction;
 import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameComputerPlayer;
+import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
 import edu.up.cs301.game.util.Tickable;
 
@@ -22,6 +23,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
 {
     private int pieceID, actionTracker = 0, rotationTracker = 0;
     private BlokusGameState state;
+    private GameAction currentAction;
     private Random r = new Random();
 
     /**
