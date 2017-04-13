@@ -40,7 +40,8 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected boolean canMove(int playerIdx) {
-        return gameState.playerCanMove(playerIdx);
+        return (gameState.getPlayerTurn() == playerIdx &&
+                gameState.playerCanMove(playerIdx));
     }
 
     /**
