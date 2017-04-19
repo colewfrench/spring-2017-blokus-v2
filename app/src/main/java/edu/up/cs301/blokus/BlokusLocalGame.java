@@ -56,8 +56,6 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
-        if (canMove(gameState.getPlayerTurn()))
-        {
             if (action instanceof FlipSelectedPieceAction) {
                 gameState.flipSelectedPiece();
             }
@@ -83,14 +81,10 @@ public class BlokusLocalGame extends LocalGame {
 
             if (action instanceof DoNothingAction) {
                 if (((DoNothingAction) action).passMyTurn()) {
+                    Log.d("Player can't move", "" + gameState.getPlayerTurn());
                     gameState.changeToNextPlayer();
                 }
             }
-        }
-        else
-        {
-            gameState.changeToNextPlayer();
-        }
 
         return true;
     }//makeMove
@@ -100,7 +94,7 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-        gameState.getValidCorners();
+        gameState.getValidCorners(gameState.getPlayerTurn());
         BlokusGameState copyState = new BlokusGameState(gameState);
         p.sendInfo((GameState)copyState);
 
@@ -116,11 +110,10 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
-
         Log.d("entered", "checking game over");
         for(int i=0; i<4; i++)
         {
-            if (canMove(i))
+            if (gameState.playerCanMove(i))
             {
                 return null;
             }
@@ -131,8 +124,8 @@ public class BlokusLocalGame extends LocalGame {
         Blok[][] boardState = gameState.getBoardState();
         int[] pointsPerPlayer = new int[4];
         int[][] playerPieces = gameState.getPlayerPieces();
-        int maxPoints =0;
-        int winner =0;
+        int maxPoints = 0;
+        int winner = 0;
         String scoreMessage = "";
 
         // give players bonus points if they placed all their pieces
@@ -153,9 +146,9 @@ public class BlokusLocalGame extends LocalGame {
             pointsPerPlayer[i] = bonusPoints;
         }
 
-        for(int j=0; j<20;j++ )
+        for(int j = 1; j < 21; j++)
         {
-            for(int k =0; k<20;k++)
+            for(int k = 1; k < 21; k++)
             {
                 Blok curBlok = boardState[j][k];
                 switch (curBlok.getColor())
@@ -172,18 +165,16 @@ public class BlokusLocalGame extends LocalGame {
                     case 3:
                         pointsPerPlayer[3]++;
                         break;
-                    default:
-                        break;
-
                 }
             }
         }
 
 
-        for( int i =0; i<4; i++)
+        for(int i = 0; i < 4; i++)
         {
             if(pointsPerPlayer[i]> maxPoints)
             {
+                Log.d("Player" + (i+1) + "Score", "" + pointsPerPlayer[i]);
                 maxPoints = pointsPerPlayer[i];
                 winner = i;
             }

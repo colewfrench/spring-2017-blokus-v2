@@ -113,7 +113,7 @@ public class BlokusGameState extends GameState implements Serializable
         this.piecePreview = copyBlokArray(orig.getPiecePreview());
         this.playerPieces = copyPlayerPieces(orig.getPlayerPieces());
 
-        this.validCorners = copyValidCorners(orig.getValidCorners());
+        this.validCorners = copyValidCorners(orig.getValidCorners(orig.getPlayerTurn()));
         this.selectedPiece = copySelectedPiece(orig.getSelectedPiece());
         this.selectedBoardBlok = copySelectedBoardBlok(orig.getSelectedBoardBlok());
         this.selectedPieceBlokId = orig.getSelectedPieceBlokId();
@@ -166,13 +166,13 @@ public class BlokusGameState extends GameState implements Serializable
      *
      * @return a reference to the GameState's ArrayList<Blok> of valid corners
      */
-    public ArrayList<Blok> getValidCorners() {
+    public ArrayList<Blok> getValidCorners(int playerId) {
         validCorners.clear();
         for (int i = 1; i < 21; i++) {
             for (int j = 1; j < 21; j++) {
                 Blok b = boardState[i][j];
 
-                if (b.getColor() == playerTurn)
+                if (b.getColor() == playerId)
                     checkSingleBlokCorners(b);
             }
         }
@@ -500,7 +500,7 @@ public class BlokusGameState extends GameState implements Serializable
     public void selectPieceTemplate(SelectPieceTemplateAction selectPieceAction)
     {
         int selectedPieceID = selectPieceAction.getSelectedPieceID();
-
+        this.selectedPieceBlokId = -1;
         this.selectedPiece = getPieceFromID(selectedPieceID);
         updatePreview();
     }
@@ -830,10 +830,11 @@ public class BlokusGameState extends GameState implements Serializable
         int pieceBlokID;
         PieceBlok[] curPieceShape;
 
-        getValidCorners();
+        getValidCorners(playerID);
 
         //Iterate over avaliable corners
-        if (validCorners != null) {
+        if (validCorners != null)
+        {
             for (int i = 0; i < validCorners.size(); i++) // for each valid corner blok on the board
             {
                 Blok b = validCorners.get(i);
@@ -842,10 +843,11 @@ public class BlokusGameState extends GameState implements Serializable
                     PieceTemplate ap = playablePieces.get(j);
                     curPieceShape = ap.getPieceShape();
 
-                    for (int k = 0; k < ap.getPieceShape().length; k++) // check each blok on piece
+                    for (int k = 0; k < curPieceShape.length; k++) // check each blok on piece
                     {
                         pieceBlokID = curPieceShape[k].getId();
 
+                        // tests placing the piece, testing rotated and flipped orientations as well
                         if (testPiecePlacement(b, ap, pieceBlokID, boardState))
                             return true;
                     }

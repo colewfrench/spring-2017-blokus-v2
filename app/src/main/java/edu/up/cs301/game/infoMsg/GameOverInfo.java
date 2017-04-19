@@ -22,7 +22,7 @@ public class GameOverInfo extends GameInfo {
 	 * 		a message that tells the result of the game
 	 */
 	public GameOverInfo(String msg) {
-		this.message = "Game is over";
+		this.message = msg;
 	}
 	
 	/**

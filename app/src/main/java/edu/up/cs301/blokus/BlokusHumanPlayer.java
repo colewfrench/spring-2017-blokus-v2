@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import edu.up.cs301.blokus.actions.ConfirmPiecePlacementAction;
+import edu.up.cs301.blokus.actions.DoNothingAction;
 import edu.up.cs301.blokus.actions.FlipSelectedPieceAction;
 import edu.up.cs301.blokus.actions.RotateSelectedPieceAction;
 import edu.up.cs301.blokus.actions.SelectBlokOnSelectedPieceAction;
@@ -80,6 +81,13 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             //enablePlayerInput();
             newState = (BlokusGameState)info;
 
+            // if the current player has no available moves, skip his turn
+            if (!newState.playerCanMove(this.playerNum))
+            {
+                game.sendAction(new DoNothingAction(this, true));
+                return;
+            }
+
             if (newState.getBoardState() != null) {
                 updateGUIBoard();
             }
@@ -93,20 +101,32 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
             updatePieceButtons();
 
-            rotateButton.setBackgroundColor(Color.YELLOW);
-            flipButton.setBackgroundColor(Color.YELLOW);
-            updateConfirmButton();
+            if (newState.getPlayerTurn() == this.playerNum)
+            {
+                rotateButton.setBackgroundColor(Color.YELLOW);
+                flipButton.setBackgroundColor(Color.YELLOW);
+                updateConfirmButton();
+            }
+            else
+            {
+                rotateButton.setBackgroundColor(Color.RED);
+                flipButton.setBackgroundColor(Color.RED);
+                confirmButton.setBackgroundColor(Color.RED);
+            }
         }
 
-        /*
         if (info instanceof NotYourTurnInfo)
         {
+            flash(Color.RED, 1000);
+            Log.d("NotYourTurn", "error");
+
+            /*
             //disablePlayerInput();
             confirmButton.setBackgroundColor(Color.RED);
             rotateButton.setBackgroundColor(Color.RED);
             flipButton.setBackgroundColor(Color.RED);
+            */
         }
-        */
     }
 
     private void enablePlayerInput()
@@ -367,7 +387,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
         //Displays valid moves
         //go through the board and check for valid movies
-        for (Blok b : newState.getValidCorners())
+        for (Blok b : newState.getValidCorners(newState.getPlayerTurn()))
         {
             // decrease by 1 b/c bloks from validMoves are stored on a 22x22 board
             displayAsButtonSelected(boardButtons[b.getRow()-1][b.getColumn()-1], 15);
@@ -421,7 +441,13 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
     private void updatePieceButtons()
     {
-        int[] curPieces = newState.getPlayerPieces()[newState.getPlayerTurn()];
+        pieceLayout.removeAllViews();
+        for (int i = 0; i < 21; i++)
+        {
+            pieceLayout.addView(pieceButtons[i]);
+        }
+
+        int[] curPieces = newState.getPlayerPieces()[this.playerNum];
         for (int i = 0; i < curPieces.length; i++)
         {
             if (curPieces[i] == -1)
@@ -503,7 +529,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
     private boolean blokIsValid(Blok selectedBlok)
     {
-        ArrayList<Blok> validCorners = newState.getValidCorners();
+        ArrayList<Blok> validCorners = newState.getValidCorners(newState.getPlayerTurn());
 
         return validCorners.contains(selectedBlok);
     }

@@ -139,7 +139,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
     public void boardPlacement()
     {
         //gets arrayList of valid moves
-        ArrayList<Blok> cpValidMoves = state.getValidCorners();
+        ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
 
         int blokID = r.nextInt(cpValidMoves.size());
 
