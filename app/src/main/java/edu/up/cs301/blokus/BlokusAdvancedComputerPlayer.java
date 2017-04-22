@@ -202,7 +202,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
 
     private void rotateAndFlip()
     {
-        PieceTemplate selectedPiece = state.getSelectedPiece();
         RotateSelectedPieceAction rotateAction =
                 new RotateSelectedPieceAction(this);
 
