@@ -578,6 +578,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                 ConfirmPiecePlacementAction confirm =
                         new ConfirmPiecePlacementAction(BlokusHumanPlayer.this);
                 game.sendAction(confirm);
+                //game.sendAction(new DoNothingAction(BlokusHumanPlayer.this, true));
             }
 
             if (v == rotateButton)

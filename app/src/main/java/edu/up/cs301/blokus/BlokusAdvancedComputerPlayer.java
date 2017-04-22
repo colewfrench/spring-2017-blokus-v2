@@ -140,7 +140,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
             {
                 sizeTracker--;
             }
-        } while (pieceID == -1 || sizeTracker >= 0);
+        } while (pieceID == -1 && sizeTracker >= 0);
 
         if(sizeTracker == -1)
         {
