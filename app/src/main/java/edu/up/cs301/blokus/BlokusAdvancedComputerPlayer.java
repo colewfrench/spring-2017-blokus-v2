@@ -59,6 +59,13 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
         if (info instanceof BlokusGameState) {
             this.state = (BlokusGameState) info;
 
+            // if the current player has no available moves, skip his turn
+            if (!state.playerCanMove(this.playerNum))
+            {
+                game.sendAction(new DoNothingAction(this, true));
+                return;
+            }
+
             if (state.getPlayerTurn() == playerNum)
             {
                 switch (actionTracker) {
