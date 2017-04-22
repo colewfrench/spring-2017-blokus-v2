@@ -382,6 +382,15 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                         boardButtons[i][j].setBackgroundResource(R.drawable.player4_blok);
                         break;
                 }
+
+                if (boardButtons[i][j].isSelected())
+                {
+                    displayAsSelectedCorner(boardButtons[i][j], 15);
+                }
+                else
+                {
+                    boardButtons[i][j].setImageResource(android.R.color.transparent);
+                }
             }
         }
 
@@ -389,10 +398,13 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         //go through the board and check for valid movies
         for (Blok b : newState.getValidCorners(newState.getPlayerTurn()))
         {
-            // decrease by 1 b/c bloks from validMoves are stored on a 22x22 board
-            displayAsValidCorner(boardButtons[b.getRow()-1][b.getColumn()-1], 15);
+            // don't overwrite the selected board square indicator
+            if (!boardButtons[b.getRow()-1][b.getColumn()-1].isSelected())
+            {
+                // decrease by 1 b/c bloks from validMoves are stored on a 22x22 board
+                displayAsValidCorner(boardButtons[b.getRow() - 1][b.getColumn() - 1], 15);
+            }
         }
-
     }
 
     /**
@@ -501,10 +513,9 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             // one of the buttons on the 20x20 grid
             if (v instanceof BoardButton)
             {
-                int row = ((BoardButton) v).getRow() + 1;
-                int col = ((BoardButton) v).getCol() + 1;
-                Blok selectedBlok = newState.getBoardState()[row][col];
-                displayAsSelectedCorner(boardButtons[row-1][col-1], 15);
+                int row = ((BoardButton) v).getRow();
+                int col = ((BoardButton) v).getCol();
+                Blok selectedBlok = newState.getBoardState()[row+1][col+1];
 
                 if (blokIsValid(selectedBlok))
                 {
@@ -518,9 +529,9 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             // one of the buttons on the 5x5 grid
             if ((v instanceof PieceDisplayButton) && (v.isActivated()))
             {
-                int row = ((PieceDisplayButton) v).getRow() + 1;
-                int col = ((PieceDisplayButton) v).getCol() + 1;
-                int id = previewBoard[row][col].getId();
+                int row = ((PieceDisplayButton) v).getRow();
+                int col = ((PieceDisplayButton) v).getCol();
+                int id = previewBoard[row+1][col+1].getId();
                 // because previewBoard is 7x7 and displayButtons is 5x5
 
                 if (selectedPiece != null)
@@ -563,6 +574,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             if (v == confirmButton)
             {
                 updatePreviewBoard();
+                resetSelectedBoardSpaces(boardButtons);
                 ConfirmPiecePlacementAction confirm =
                         new ConfirmPiecePlacementAction(BlokusHumanPlayer.this);
                 game.sendAction(confirm);
