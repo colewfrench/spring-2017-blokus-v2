@@ -390,7 +390,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         for (Blok b : newState.getValidCorners(newState.getPlayerTurn()))
         {
             // decrease by 1 b/c bloks from validMoves are stored on a 22x22 board
-            displayAsButtonSelected(boardButtons[b.getRow()-1][b.getColumn()-1], 15);
+            displayAsValidCorner(boardButtons[b.getRow()-1][b.getColumn()-1], 15);
         }
 
     }
@@ -429,7 +429,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
                 if (displayButtons[i][j].isSelected())
                 {
-                    displayAsButtonSelected(displayButtons[i][j], 10);
+                    displayAsValidCorner(displayButtons[i][j], 10);
                 }
                 else
                 {
@@ -480,9 +480,15 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
-    private void displayAsButtonSelected(ImageButton button, int padding)
+    private void displayAsValidCorner(ImageButton button, int padding)
     {
         button.setImageResource(R.drawable.circle_check);
+        button.setPadding(padding,padding,padding,padding);
+        button.setScaleType(ImageView.ScaleType.FIT_XY);
+    }
+    private void displayAsSelectedCorner(ImageButton button, int padding)
+    {
+        button.setImageResource(R.drawable.circle_target);
         button.setPadding(padding,padding,padding,padding);
         button.setScaleType(ImageView.ScaleType.FIT_XY);
     }
@@ -498,6 +504,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                 int row = ((BoardButton) v).getRow() + 1;
                 int col = ((BoardButton) v).getCol() + 1;
                 Blok selectedBlok = newState.getBoardState()[row][col];
+                displayAsSelectedCorner(boardButtons[row-1][col-1], 15);
 
                 if (blokIsValid(selectedBlok))
                 {
