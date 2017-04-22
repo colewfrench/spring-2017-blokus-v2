@@ -66,7 +66,7 @@ public class BlokusMainActivity extends GameMainActivity {
                 PORT_NUMBER);
 
         // Add the default players to the configuration
-        defaultConfig.addPlayer("Adrian", 0); // player 1: a human player
+        defaultConfig.addPlayer("Adrian",0); // player 1: a human player
         defaultConfig.addPlayer("Cole", 2); // player 2: a computer player
         defaultConfig.addPlayer("Devin", 2); // player 3: a computer player
         defaultConfig.addPlayer("Evan", 2); // player 4: a computer player
@@ -76,7 +76,7 @@ public class BlokusMainActivity extends GameMainActivity {
         // - IP code: (empty string)
         // - default player type: human player
         defaultConfig.setRemoteData("Remote Player", "", 0);
-        //defaultConfig.setUserModifiable(false);
+        defaultConfig.setUserModifiable(false);
 
         // return the configuration
         return defaultConfig;
