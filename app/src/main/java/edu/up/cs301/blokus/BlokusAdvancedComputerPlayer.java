@@ -55,7 +55,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-        //IT RECEIVES THE INFO
+
         if (info instanceof BlokusGameState) {
             this.state = (BlokusGameState) info;
 
@@ -126,30 +126,33 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
      */
     public void selectPiece(int[][] pieces)
     {
-        int pieceIndex;
         //TODO think of way to change between 5,4,3,2,1
         //TODO error if all pieces of a size have been played (i.e. all equal -1)
         //find piece to play
         do {
-            pieceIndex = sizeTracker;
-            if(pieceIndex == -1)
-            {
-                game.sendAction(new DoNothingAction(this, true));
-            }
-            pieceID = pieces[this.playerNum][pieceIndex];
+            pieceID = pieces[this.playerNum][sizeTracker];
+
             Log.d("Player",Integer.toString(state.getPlayerTurn()));
             Log.d("Size Tracker", Integer.toString(sizeTracker));
             Log.d("PieceID",Integer.toString(pieceID));
-            if(pieceID ==-1)
+
+            if (pieceID == -1)
             {
                 sizeTracker--;
             }
-        } while (pieceID == -1);
+        } while (pieceID == -1 || sizeTracker >= 0);
 
-        SelectPieceTemplateAction spta =
-                new SelectPieceTemplateAction(this, pieceID);
+        if(sizeTracker == -1)
+        {
+            game.sendAction(new DoNothingAction(this, true));
+        }
+        else
+        {
+            SelectPieceTemplateAction spta =
+                    new SelectPieceTemplateAction(this, pieceID);
 
-        game.sendAction(spta);
+            game.sendAction(spta);
+        }
     }
 
     public void selectBlokOnPiece()

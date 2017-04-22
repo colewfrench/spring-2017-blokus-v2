@@ -479,6 +479,7 @@ public class BlokusGameState extends GameState implements Serializable
         if (selectedPiece != null)
         {
             selectedPiece.flip();
+            //this.selectedPieceBlokId = -1;
             updatePreview();
         }
     }
@@ -488,6 +489,7 @@ public class BlokusGameState extends GameState implements Serializable
         if (selectedPiece != null)
         {
             selectedPiece.rotate();
+            //this.selectedPieceBlokId = -1;
             updatePreview();
         }
     }
