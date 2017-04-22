@@ -16,16 +16,16 @@ public class BoardButton extends ImageButton {
 
     private int color;
 
-    private boolean boardClicked;
+    private boolean isSelected;
 
     private int row, col;
 
-    public BoardButton(Context context, int initRow, int initCol, boolean initBoardClicked) {
+    public BoardButton(Context context, int initRow, int initCol, boolean initSelected) {
         super(context);
 
         this.row = initRow;
         this.col = initCol;
-        this.boardClicked = initBoardClicked;
+        this.isSelected = initSelected;
     }
 
     public void setColor(int color)
@@ -48,13 +48,13 @@ public class BoardButton extends ImageButton {
         return col;
     }
 
-    public boolean isBoardClicked()
+    public boolean isSelected()
     {
-        return boardClicked;
+        return isSelected;
     }
 
-    public void setBoardClicked(boolean t)
+    public void setSelected(boolean t)
     {
-        this.boardClicked = t;
+        this.isSelected = t;
     }
 }

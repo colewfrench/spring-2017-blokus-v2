@@ -7,38 +7,24 @@ import android.widget.ImageButton;
  * Created by frenchco19 on 3/25/2017.
  */
 
-public class PieceDisplayButton extends ImageButton {
+public class PieceDisplayButton extends BoardButton {
 
     private boolean isActive;
-    private boolean isSelected;
-    private int row, col;
 
-    public PieceDisplayButton(Context context, int initRow, int initCol, boolean initActive) {
-        super(context);
+    public PieceDisplayButton(Context context, int initRow, int initCol,
+                              boolean initSelected, boolean initActive) {
+        super(context, initRow, initCol, initSelected);
 
-        this.row = initRow;
-        this.col = initCol;
         this.isActive = initActive;
-        this.isSelected = false;
     }
 
-    public int getRow()
+    public boolean isActive()
     {
-        return row;
+        return this.isActive;
     }
 
-    public int getCol()
+    public void setActive(boolean s)
     {
-        return col;
-    }
-
-    public boolean isSelected()
-    {
-        return this.isSelected;
-    }
-
-    public void setSelected(boolean s)
-    {
-        this.isSelected = s;
+        this.isActive = s;
     }
 }
