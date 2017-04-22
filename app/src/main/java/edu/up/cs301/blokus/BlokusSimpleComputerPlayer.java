@@ -23,7 +23,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
 {
     private int pieceID, actionTracker = 0, rotationTracker = 0;
     private BlokusGameState state;
-    private GameAction currentAction;
     private Random r = new Random();
 
     /**
@@ -47,23 +46,31 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
      */
     @Override
     protected void receiveInfo(GameInfo info) {
-        //IT RECEIVES THE INFO
+
         if (info instanceof BlokusGameState) {
             this.state = (BlokusGameState) info;
+
+            // if the current player has no available moves, skip his turn
+            if (!state.playerCanMove(this.playerNum))
+            {
+                game.sendAction(new DoNothingAction(this, true));
+                return;
+            }
+
 
             if (state.getPlayerTurn() == playerNum)
             {
                 switch (actionTracker) {
                     case 0:
-                        boardPlacement();
+                        selectPiece(state.getPlayerPieces());
                         actionTracker = 1;
                         break;
                     case 1:
-                        selectPiece(state.getPlayerPieces());
+                        selectBlokOnPiece();
                         actionTracker = 2;
                         break;
                     case 2:
-                        selectBlokOnPiece();
+                        boardPlacement();
                         actionTracker = 3;
                         break;
                     case 3:
@@ -89,6 +96,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
                     default:
                         actionTracker = 0;
                         rotationTracker = 0;
+                        game.sendAction(new DoNothingAction(this,false));
                         break;
                 }
             }
@@ -172,7 +180,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
 
     private void rotateAndFlip()
     {
-        PieceTemplate selectedPiece = state.getSelectedPiece();
         RotateSelectedPieceAction rotateAction =
                 new RotateSelectedPieceAction(this);
 
