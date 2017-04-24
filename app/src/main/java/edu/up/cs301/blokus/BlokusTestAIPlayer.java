@@ -29,7 +29,6 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
     private GameAction curAction;
     private AIState curState;
     public int rotateTracker;
-    public int flipTracker;
 
     static Random r;
 
@@ -56,10 +55,7 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
             if (!gameState.playerCanMove(this.playerNum))
             {
                 game.sendAction(new DoNothingAction(this, true));
-                return;
-            }
-
-            if (gameState.getPlayerTurn() == this.playerNum)
+            } else if (gameState.getPlayerTurn() == this.playerNum)
             {
                 periodic();
 
