@@ -57,7 +57,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
                 return;
             }
 
-
+            //Places piece if there is a valid move or doNothingMethod
             if (state.getPlayerTurn() == playerNum)
             {
                 switch (actionTracker) {
