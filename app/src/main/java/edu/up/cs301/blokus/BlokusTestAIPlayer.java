@@ -1,6 +1,7 @@
 package edu.up.cs301.blokus;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import edu.up.cs301.blokus.actions.ConfirmPiecePlacementAction;
@@ -29,8 +30,9 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
     private AIState curState;
     public int rotateTracker;
 
-    static Random r;
+    private Hashtable<Integer,int[]> PlayedPieceBloks = new Hashtable<>();
 
+    static Random r;
     /**
      * constructor
      *
@@ -154,13 +156,6 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
 
                 AI.setAction(tempAction);
                 return tempState;
-            }
-        },
-        Flip {
-            @Override
-            public AIState checkState(BlokusTestAIPlayer AI, BlokusGameState state)
-            {
-                return ConfirmPlacement;
             }
         },
         ConfirmPlacement {

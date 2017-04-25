@@ -9,6 +9,7 @@ import edu.up.cs301.game.actionMsg.GameAction;
 
 /**
  * Created by lowa19 on 3/5/2017.
+ *
  */
 public class FlipSelectedPieceAction extends GameAction implements Serializable{
 
