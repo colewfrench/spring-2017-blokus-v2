@@ -85,7 +85,6 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             if (!newState.playerCanMove(this.playerNum))
             {
                 game.sendAction(new DoNothingAction(this, true));
-                return;
             }
 
             if (newState.getBoardState() != null) {

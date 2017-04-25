@@ -638,7 +638,7 @@ public class BlokusGameState extends GameState implements Serializable
             return null;
         }
 
-        ArrayList<Blok> validCorners = new ArrayList<Blok>();
+        ArrayList<Blok> validCorners = new ArrayList<>();
         int row, col;
 
         for (int i = 0; i < origValidCorners.size(); i++) {
@@ -816,7 +816,7 @@ public class BlokusGameState extends GameState implements Serializable
      */
     public boolean playerCanMove(int playerID)
     {
-        ArrayList<PieceTemplate> playablePieces = new ArrayList<PieceTemplate>();
+        ArrayList<PieceTemplate> playablePieces = new ArrayList<>();
         int[] currentPieces = playerPieces[playerID];
 
         PieceTemplate tempPiece;

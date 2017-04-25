@@ -1,6 +1,7 @@
 package edu.up.cs301.blokus;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import edu.up.cs301.blokus.actions.ConfirmPiecePlacementAction;
@@ -29,10 +30,10 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
     private GameAction curAction;
     private AIState curState;
     public int rotateTracker;
-    public int flipTracker;
+
+    private Hashtable<Integer,int[]> PlayedPieceBloks = new Hashtable<>();
 
     static Random r;
-
     /**
      * constructor
      *
@@ -56,10 +57,7 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
             if (!gameState.playerCanMove(this.playerNum))
             {
                 game.sendAction(new DoNothingAction(this, true));
-                return;
-            }
-
-            if (gameState.getPlayerTurn() == this.playerNum)
+            } else if (gameState.getPlayerTurn() == this.playerNum)
             {
                 periodic();
 
@@ -161,13 +159,6 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
 
                 AI.setAction(tempAction);
                 return tempState;
-            }
-        },
-        Flip {
-            @Override
-            public AIState checkState(BlokusTestAIPlayer AI, BlokusGameState state)
-            {
-                return ConfirmPlacement;
             }
         },
         ConfirmPlacement {

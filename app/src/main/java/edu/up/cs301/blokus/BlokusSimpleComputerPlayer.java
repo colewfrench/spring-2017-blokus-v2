@@ -25,6 +25,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
     private BlokusGameState state;
     private Random r = new Random();
 
+
     /**
      * Constructor for objects of class CounterComputerPlayer1
      *
@@ -57,7 +58,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
                 return;
             }
 
-
+            //Places piece if there is a valid move or doNothingMethod
             if (state.getPlayerTurn() == playerNum)
             {
                 switch (actionTracker) {

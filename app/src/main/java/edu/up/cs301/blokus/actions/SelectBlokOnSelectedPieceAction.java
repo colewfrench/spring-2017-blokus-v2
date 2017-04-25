@@ -25,7 +25,7 @@ public class SelectBlokOnSelectedPieceAction extends GameAction implements Seria
      * @author Evan Sterba
      * @param player the player who created the action
      * @param selectedBlokId the blok ID on the piece that was selected
-     *
+     *Player selects the corner on the Piece preview screen that will martch up according to the corner that is on the board
      */
     public SelectBlokOnSelectedPieceAction(GamePlayer player, int selectedBlokId)
     {

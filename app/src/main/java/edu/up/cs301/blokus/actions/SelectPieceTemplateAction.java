@@ -24,6 +24,7 @@ public class SelectPieceTemplateAction extends GameAction implements Serializabl
      * @author Evan Sterba
      * @param player the player who created this action
      * @param selectedPieceID the piece that was selected
+     * Player selects the piece they want to display on the board, which will highlight when selected
      */
     public SelectPieceTemplateAction(GamePlayer player, int selectedPieceID)
     {
