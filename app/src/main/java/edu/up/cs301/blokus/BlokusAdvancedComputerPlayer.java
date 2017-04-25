@@ -63,10 +63,8 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
             if (!state.playerCanMove(this.playerNum))
             {
                 game.sendAction(new DoNothingAction(this, true));
-                return;
             }
-
-            if (state.getPlayerTurn() == playerNum)
+            else if (state.getPlayerTurn() == playerNum)
             {
                 switch (actionTracker) {
                     case 0:

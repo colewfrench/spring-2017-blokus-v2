@@ -25,7 +25,6 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
     }
 
     private BlokusGameState gameState;
-    private AIStateMachine stateMachine;
     private GameAction curAction;
     private AIState curState;
     public int rotateTracker;
@@ -39,8 +38,6 @@ public class BlokusTestAIPlayer extends GameComputerPlayer {
      */
     public BlokusTestAIPlayer(String name) {
         super(name);
-
-        this.stateMachine = new AIStateMachine();
         curState = AIStates.SelectPiece;
         r = new Random();
     }

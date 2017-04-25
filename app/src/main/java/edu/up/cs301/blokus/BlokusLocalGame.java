@@ -69,6 +69,7 @@ public class BlokusLocalGame extends LocalGame {
                 if (gameState.confirmPiecePlacement()) {
                     // piece was successfully placed; go to next player turn
                     gameState.changeToNextPlayer();
+                    gameState.getValidCorners(gameState.getPlayerTurn());
                 }
                 // else, current piece cannot be placed, continue current turn
             }
@@ -81,8 +82,8 @@ public class BlokusLocalGame extends LocalGame {
 
             if (action instanceof DoNothingAction) {
                 if (((DoNothingAction) action).passMyTurn()) {
-                    Log.d("Player can't move", "" + gameState.getPlayerTurn());
                     gameState.changeToNextPlayer();
+                    gameState.getValidCorners(gameState.getPlayerTurn());
                 }
             }
 
@@ -94,7 +95,6 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-        gameState.getValidCorners(gameState.getPlayerTurn());
         BlokusGameState copyState = new BlokusGameState(gameState);
         p.sendInfo((GameState)copyState);
 
