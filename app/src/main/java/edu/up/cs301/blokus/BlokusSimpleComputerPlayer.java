@@ -25,6 +25,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Ti
     private BlokusGameState state;
     private Random r = new Random();
 
+
     /**
      * Constructor for objects of class CounterComputerPlayer1
      *
