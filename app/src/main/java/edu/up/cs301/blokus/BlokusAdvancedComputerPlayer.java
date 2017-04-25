@@ -66,6 +66,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
                 return;
             }
 
+            //places a valid peice
             if (state.getPlayerTurn() == playerNum)
             {
                 switch (actionTracker) {
