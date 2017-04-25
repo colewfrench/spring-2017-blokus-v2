@@ -61,8 +61,7 @@ public class BlokusMainActivity extends GameMainActivity {
             @Override
             public GamePlayer createPlayer(String name) {
                 return new BlokusTestAIPlayer(name);
-            }
-        });
+            }});
 
         // Create a game configuration class for Counter:
         // - player types as given above
@@ -73,7 +72,7 @@ public class BlokusMainActivity extends GameMainActivity {
                 PORT_NUMBER);
 
         // Add the default players to the configuration
-        defaultConfig.addPlayer("Adrian",0); // player 1: a human player
+        defaultConfig.addPlayer("Adrian", 0); // player 1: a human player
         defaultConfig.addPlayer("Cole", 3); // player 2: a computer player
         defaultConfig.addPlayer("Devin", 3); // player 3: a computer player
         defaultConfig.addPlayer("Evan", 3); // player 4: a computer player
