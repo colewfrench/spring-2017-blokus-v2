@@ -159,6 +159,7 @@ public class BlokusGameState extends GameState implements Serializable
         return initArray;
     }
 
+    // TODO test this, possibly not working
     /**
      * searches the current board state for any corners that
      * the current player could possibly place a piece off of
@@ -847,6 +848,7 @@ public class BlokusGameState extends GameState implements Serializable
         Blok curBoardBlok;
 
         getValidCorners(playerID);
+        Log.d("valid Size", " " + validCorners.size());
 
         //Iterate over avaliable corners
         if (validCorners != null)
@@ -863,7 +865,7 @@ public class BlokusGameState extends GameState implements Serializable
                     {
                         pieceBlokID = curPieceShape[k].getId();
 
-                        // tests placing the piece, testing rotated and flipped orientations as well
+                        // tests placing the piece, testing all rotated and flipped orientations as well
                         if (testPiecePlacement(curBoardBlok, ap, pieceBlokID, boardState))
                             return true;
                     }

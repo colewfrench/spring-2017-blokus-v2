@@ -80,6 +80,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         {
             //enablePlayerInput();
             newState = (BlokusGameState)info;
+            Log.d("entered HumanPlayer", "yes");
 
             // if the current player has no available moves, skip his turn
             if (!newState.playerCanMove(this.playerNum))
