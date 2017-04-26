@@ -822,6 +822,11 @@ public class BlokusGameState extends GameState implements Serializable
         this.playerPieces = playerPieces;
     }
 
+    public void setValidCorners(ArrayList<Blok> newValidCorners)
+    {
+        this.validCorners = newValidCorners;
+    }
+
     /**
      * report if the given player has any moves available
      * @param playerID the player
@@ -848,7 +853,7 @@ public class BlokusGameState extends GameState implements Serializable
         PieceBlok[] curPieceShape;
         Blok curBoardBlok;
 
-        getValidCorners(playerID);
+        ArrayList<Blok> validCorners = getValidCorners(playerID);
         Log.d("valid Size", " " + validCorners.size());
 
         //Iterate over avaliable corners
