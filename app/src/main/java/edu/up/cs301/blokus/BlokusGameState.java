@@ -67,6 +67,9 @@ public class BlokusGameState extends GameState implements Serializable
     // contains the 7x7 array to track the selected piece's orientation
     private Blok[][] piecePreview;
 
+    // stores the bloks on the board where current player can place a piece
+    ArrayList<Blok> validCorners;
+
     // these 3 iVars store the info necessary to place a piece on the board
     private PieceTemplate selectedPiece;
     private Blok selectedBoardBlok;
