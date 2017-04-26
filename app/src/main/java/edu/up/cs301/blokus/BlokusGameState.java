@@ -67,13 +67,13 @@ public class BlokusGameState extends GameState implements Serializable
     // contains the 7x7 array to track the selected piece's orientation
     private Blok[][] piecePreview;
 
+    // stores the bloks on the board where current player can place a piece
+    ArrayList<Blok> validCorners;
+
     // these 3 iVars store the info necessary to place a piece on the board
     private PieceTemplate selectedPiece;
     private Blok selectedBoardBlok;
     private int selectedPieceBlokId;
-
-    // stores the bloks on the board where current player can place a piece
-    private ArrayList<Blok> validCorners;
 
     // 4x21 array, stores each player's remaining pieces
     private int[][] playerPieces;
@@ -168,17 +168,18 @@ public class BlokusGameState extends GameState implements Serializable
      * @return a reference to the GameState's ArrayList<Blok> of valid corners
      */
     public ArrayList<Blok> getValidCorners(int playerId) {
-        validCorners.clear();
+        // stores the bloks on the board where current player can place a piece
+        ArrayList<Blok> validCorners = new ArrayList<>();
         for (int i = 1; i < 21; i++) {
             for (int j = 1; j < 21; j++) {
                 Blok b = boardState[i][j];
 
                 if (b.getColor() == playerId)
-                    checkSingleBlokCorners(b);
+                    checkSingleBlokCorners(b, validCorners);
             }
         }
 
-        checkBoardCorners();
+        checkBoardCorners(validCorners);
         return validCorners;
     }
 
@@ -190,7 +191,7 @@ public class BlokusGameState extends GameState implements Serializable
      *
      * @param blok the blok on the board whose corners are to be checked
      */
-    private void checkSingleBlokCorners(Blok blok)
+    private void checkSingleBlokCorners(Blok blok, ArrayList<Blok> validCorners)
     {
         int row = blok.getRow();
         int col = blok.getColumn();
@@ -235,7 +236,7 @@ public class BlokusGameState extends GameState implements Serializable
      * add a corner of the board to the valid corners array if
      * it is valid for the current player
      */
-    private void checkBoardCorners()
+    private void checkBoardCorners(ArrayList<Blok> validCorners)
     {
         if (boardState[0][0].getColor() == playerTurn &&
                 boardState[1][1].getColor() == EMPTY_BLOK)
@@ -826,6 +827,11 @@ public class BlokusGameState extends GameState implements Serializable
         this.playerPieces = playerPieces;
     }
 
+    public void setValidCorners(ArrayList<Blok> newValidCorners)
+    {
+        this.validCorners = newValidCorners;
+    }
+
     /**
      * report if the given player has any moves available
      * @param playerID the player
@@ -852,7 +858,7 @@ public class BlokusGameState extends GameState implements Serializable
         PieceBlok[] curPieceShape;
         Blok curBoardBlok;
 
-        getValidCorners(playerID);
+        ArrayList<Blok> validCorners = getValidCorners(playerID);
         Log.d("valid Size", " " + validCorners.size());
 
         //Iterate over avaliable corners

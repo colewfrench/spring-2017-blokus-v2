@@ -69,7 +69,7 @@ public class BlokusLocalGame extends LocalGame {
                 if (gameState.confirmPiecePlacement()) {
                     // piece was successfully placed; go to next player turn
                     gameState.changeToNextPlayer();
-                    gameState.getValidCorners(gameState.getPlayerTurn());
+                    gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
                 }
                 // else, current piece cannot be placed, continue current turn
             }
@@ -83,7 +83,7 @@ public class BlokusLocalGame extends LocalGame {
             if (action instanceof DoNothingAction) {
                 if (((DoNothingAction) action).passMyTurn()) {
                     gameState.changeToNextPlayer();
-                    gameState.getValidCorners(gameState.getPlayerTurn());
+                    gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
                 }
             }
 
