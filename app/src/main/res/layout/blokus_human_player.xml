@@ -9,7 +9,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="1520px">
+        android:layout_height="1520px"
+        android:id="@+id/boardContainer">
 
         <LinearLayout
             android:id="@+id/boardLayout"

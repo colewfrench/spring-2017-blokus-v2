@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -217,6 +218,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         // to preview the orientation of their selected piece
         initPiecePreviewDisplay();
 
+
     }
 
     /**
@@ -360,6 +362,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
      */
     private void updateGUIBoard()
     {
+
+
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
