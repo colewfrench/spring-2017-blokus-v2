@@ -68,7 +68,7 @@ public class BlokusGameState extends GameState implements Serializable
     private Blok[][] piecePreview;
 
     // stores the bloks on the board where current player can place a piece
-    ArrayList<Blok> validCorners;
+    private ArrayList<Blok> validCorners;
 
     // these 3 iVars store the info necessary to place a piece on the board
     private PieceTemplate selectedPiece;
@@ -77,8 +77,6 @@ public class BlokusGameState extends GameState implements Serializable
 
     // 4x21 array, stores each player's remaining pieces
     private int[][] playerPieces;
-
-    private ArrayList<Blok> validCorners;
 
     // use for master copy
     public BlokusGameState()
