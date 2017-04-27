@@ -1,9 +1,7 @@
 package edu.up.cs301.blokus;
 
-
-import android.util.Log;
-
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import edu.up.cs301.blokus.actions.ConfirmPiecePlacementAction;
@@ -17,195 +15,182 @@ import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
-import edu.up.cs301.game.util.Tickable;
 
-public class BlokusSimpleComputerPlayer extends GameComputerPlayer implements Tickable
-{
-    private int pieceID, actionTracker = 0, rotationTracker = 0;
-    private BlokusGameState state;
-    private Random r = new Random();
+/**
+ * Created by frenchco19 on 4/22/2017.
+ */
+public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
 
-
-    /**
-     * Constructor for objects of class CounterComputerPlayer1
-     *
-     * @param name
-     * 		the player's name
-     *
-     */
-    public BlokusSimpleComputerPlayer(String name) {
-        // invoke superclass constructor
-        super(name);
-
+    interface AIState {
+        AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state);
     }
 
+    private BlokusGameState gameState;
+    private GameAction curAction;
+    private AIState curState;
+    public int rotateTracker;
+
+    private Hashtable<Integer,int[]> PlayedPieceBloks = new Hashtable<>();
+
+    static Random r;
     /**
-     * callback method--game's state has changed
+     * constructor
      *
-     * @param info
-     * 		the information (presumably containing the game's state)
+     * @param name the player's name (e.g., "John")
      */
+    public BlokusSimpleComputerPlayer(String name) {
+        super(name);
+        curState = AIStates.SelectPiece;
+        r = new Random();
+    }
+
     @Override
     protected void receiveInfo(GameInfo info) {
-
-        if (info instanceof BlokusGameState) {
-            this.state = (BlokusGameState) info;
+        if (info instanceof BlokusGameState)
+        {
+            this.gameState = (BlokusGameState)info;
 
             // if the current player has no available moves, skip his turn
-            if (!state.playerCanMove(this.playerNum))
+            if (!gameState.playerCanMove(this.playerNum))
             {
                 game.sendAction(new DoNothingAction(this, true));
-                return;
-            }
-
-            //Places piece if there is a valid move or doNothingMethod
-            if (state.getPlayerTurn() == playerNum)
+            } else if (gameState.getPlayerTurn() == this.playerNum)
             {
-                switch (actionTracker) {
+                periodic();
+
+                game.sendAction(curAction);
+            }
+        }
+    }
+
+    enum AIStates implements AIState {
+        SelectPiece {
+            @Override
+            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
+            {
+                int[][] pieces = state.getPlayerPieces();
+                int pieceIndex, pieceID;
+                //find piece to play
+                do {
+                    //gets random number between 0 & 20
+                    pieceIndex = r.nextInt(21);
+                    pieceID = pieces[state.getPlayerTurn()][pieceIndex];
+                } while (pieceID == -1);
+
+                SelectPieceTemplateAction spta =
+                        new SelectPieceTemplateAction(AI, pieceID);
+
+                AI.setAction(spta);
+                return SelectPieceBlok;
+            }
+        },
+        SelectBoardBlok {
+            @Override
+            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
+            {
+                //gets arrayList of valid moves
+                ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
+
+                Blok selectedBoardBlok = cpValidMoves.get(r.nextInt(cpValidMoves.size()));
+
+                SelectValidBlokOnBoardAction svboba =
+                        new SelectValidBlokOnBoardAction(AI, selectedBoardBlok);
+
+                AI.setAction(svboba);
+                return ConfirmPlacement;
+            }
+        },
+        SelectPieceBlok {
+            @Override
+            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
+            {
+                PieceTemplate selectedPiece = state.getSelectedPiece();
+
+                PieceBlok[] bloksOnPiece = selectedPiece.getPieceShape();
+
+                int selectedBlokID = r.nextInt(bloksOnPiece.length);
+
+                SelectBlokOnSelectedPieceAction sbospa =
+                        new SelectBlokOnSelectedPieceAction(AI, selectedBlokID);
+
+                AI.setAction(sbospa);
+                return SelectBoardBlok;
+            }
+        },
+        Rotate {
+            @Override
+            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
+            {
+                AIState tempState = ConfirmPlacement;
+                GameAction tempAction = new DoNothingAction(AI, false);
+                switch (AI.rotateTracker)
+                {
                     case 0:
-                        selectPiece(state.getPlayerPieces());
-                        actionTracker = 1;
-                        break;
                     case 1:
-                        selectBlokOnPiece();
-                        actionTracker = 2;
-                        break;
                     case 2:
-                        boardPlacement();
-                        actionTracker = 3;
-                        break;
                     case 3:
-                        if (rotationTracker == 9) {
-                            actionTracker = 0;
-                            rotationTracker = 0;
-                            game.sendAction(new DoNothingAction(this, false));
-                        } else {
-                            rotateAndFlip();
-                            rotationTracker++;
-                            actionTracker = 4;
-                        }
+                        tempAction = new RotateSelectedPieceAction(AI);
+                        tempState = ConfirmPlacement;
                         break;
                     case 4:
-                        if (moveIsValid()) {
-                            actionTracker = 0;
-                            rotationTracker = 0;
-                        } else {
-                            actionTracker = 0;
-                        }
-                        playRandom();
+                        tempAction = new FlipSelectedPieceAction(AI);
+                        tempState = ConfirmPlacement;
                         break;
-                    default:
-                        actionTracker = 0;
-                        rotationTracker = 0;
-                        game.sendAction(new DoNothingAction(this,false));
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        tempAction = new RotateSelectedPieceAction(AI);
+                        tempState = ConfirmPlacement;
                         break;
+                }
+
+                AI.rotateTracker++;
+
+                if (AI.rotateTracker == 9)
+                {
+                    AI.rotateTracker = 0;
+                    tempState = SelectPiece;
+                }
+
+
+                AI.setAction(tempAction);
+                return tempState;
+            }
+        },
+        ConfirmPlacement {
+            @Override
+            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
+            {
+                Blok selectedBoardBlok = state.getSelectedBoardBlok();
+                PieceTemplate selectedPiece = state.getSelectedPiece();
+                int selectedPieceBlokId = state.getSelectedPieceBlokId();
+                Blok[][] board = state.getBoardState();
+
+                if (state.prepareValidMove(selectedBoardBlok,
+                        selectedPiece,
+                        selectedPieceBlokId,
+                        board) == null)
+                {
+                    AI.setAction(new DoNothingAction(AI, false));
+                    return Rotate;
+                }
+                else
+                {
+                    AI.setAction(new ConfirmPiecePlacementAction(AI));
+                    return SelectPiece;
                 }
             }
         }
     }
 
-    public void playRandom()
+    private void periodic()
     {
-        ConfirmPiecePlacementAction cppa = new ConfirmPiecePlacementAction(this);
-
-        game.sendAction(cppa);
+        curState = curState.checkState(this, gameState);
     }
 
-    /**
-     * this works
-     * @param pieces
-     */
-    public void selectPiece(int[][] pieces)
+    public void setAction(GameAction action)
     {
-        int pieceIndex;
-        //find piece to play
-        do {
-            //gets random number between 0 & 20
-            pieceIndex = r.nextInt(21);
-            pieceID = pieces[this.playerNum][pieceIndex];
-        } while (pieceID == -1);
-
-        SelectPieceTemplateAction spta =
-                new SelectPieceTemplateAction(this, pieceID);
-
-        game.sendAction(spta);
-    }
-
-    public void selectBlokOnPiece()
-    {
-        PieceTemplate selectedPiece = state.getSelectedPiece();
-
-        PieceBlok[] bloksOnPiece = selectedPiece.getPieceShape();
-
-        int selectedBlokID = r.nextInt(bloksOnPiece.length);
-
-        SelectBlokOnSelectedPieceAction sbospa =
-                new SelectBlokOnSelectedPieceAction(this, selectedBlokID);
-
-        game.sendAction(sbospa);
-    }
-
-    public void boardPlacement()
-    {
-        //gets arrayList of valid moves
-        ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
-
-        int blokID = r.nextInt(cpValidMoves.size());
-
-        //select random move
-        Blok selectedBoardBlok = cpValidMoves.get(blokID);
-
-        SelectValidBlokOnBoardAction svboba =
-                new SelectValidBlokOnBoardAction(this, selectedBoardBlok);
-
-        game.sendAction(svboba);
-    }
-
-    private boolean moveIsValid()
-    {
-        Blok selectedBoardBlok = state.getSelectedBoardBlok();
-        PieceTemplate selectedPiece = state.getSelectedPiece();
-        int selectedPieceBlokId = state.getSelectedPieceBlokId();
-        Blok[][] board = state.getBoardState();
-
-        if (state.prepareValidMove(selectedBoardBlok,
-                selectedPiece,
-                selectedPieceBlokId,
-                board) == null)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private void rotateAndFlip()
-    {
-        RotateSelectedPieceAction rotateAction =
-                new RotateSelectedPieceAction(this);
-
-        FlipSelectedPieceAction flipAction =
-                new FlipSelectedPieceAction(this);
-        switch(rotationTracker)
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                game.sendAction(rotateAction); // rotate 4 in 4 cases
-                break;
-            case 4:
-                game.sendAction(flipAction); // flip
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                game.sendAction(rotateAction); // rotate in 4 cases
-                break;
-            case 9:
-                break;
-        }
+        this.curAction = action;
     }
 }
-

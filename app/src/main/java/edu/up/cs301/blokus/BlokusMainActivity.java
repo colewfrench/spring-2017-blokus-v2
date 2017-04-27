@@ -57,12 +57,6 @@ public class BlokusMainActivity extends GameMainActivity {
                 return new BlokusAdvancedComputerPlayer(name);
             }});
 
-        playerTypes.add(new GamePlayerType("TestAI") {
-            @Override
-            public GamePlayer createPlayer(String name) {
-                return new BlokusTestAIPlayer(name);
-            }});
-
         // Create a game configuration class for Counter:
         // - player types as given above
         // - Only Four Players
