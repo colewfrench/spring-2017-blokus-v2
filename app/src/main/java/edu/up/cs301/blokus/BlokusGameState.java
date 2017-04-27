@@ -67,6 +67,9 @@ public class BlokusGameState extends GameState implements Serializable
     // contains the 7x7 array to track the selected piece's orientation
     private Blok[][] piecePreview;
 
+    // stores the bloks on the board where current player can place a piece
+    ArrayList<Blok> validCorners;
+
     // these 3 iVars store the info necessary to place a piece on the board
     private PieceTemplate selectedPiece;
     private Blok selectedBoardBlok;
@@ -301,9 +304,11 @@ public class BlokusGameState extends GameState implements Serializable
                 setBlokPlacement(temp, selectedPiece.getPieceShape(),
                         pb, pb.getAdjacencies());
 
-                // check if any pieces bloks being planned to place
-                // will be adjacent to already placed bloks of the same
-                // color, in which case the placement is invalid
+                /*
+                    check if any pieces bloks being planned to place
+                    will be adjacent to already placed bloks of the same
+                    color, in which case the placement is invalid
+                */
                 if (!checkAdjacentBloksOnBoard(pb, board))
                     return null;
             }
@@ -314,6 +319,9 @@ public class BlokusGameState extends GameState implements Serializable
         return bloksToColor;
     }
 
+    /*
+        method used to place a piece on the board
+     */
     private void setBlokPlacement(ArrayList<PieceBlok> bloksToColor,
                                      PieceBlok[] pieceShape,
                                      PieceBlok curBlok, int[] curAdj)

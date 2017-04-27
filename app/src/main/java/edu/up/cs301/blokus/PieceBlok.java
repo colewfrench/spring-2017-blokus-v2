@@ -17,6 +17,7 @@ public class PieceBlok extends Blok {
     public static final int TOP = 1;
     public static final int RIGHT = 2;
     public static final int BOTTOM = 3;
+    private boolean attemptedBlok = false;
 
     private int[] adjacencies;
 
@@ -37,5 +38,13 @@ public class PieceBlok extends Blok {
         {
             this.adjacencies[i] = newAdj[i];
         }
+    }
+    public void setAttemptedBlok(boolean isTried)
+    {
+        this.attemptedBlok = isTried;
+    }
+    public boolean getAttemptedBlok()
+    {
+        return this.attemptedBlok;
     }
 }
