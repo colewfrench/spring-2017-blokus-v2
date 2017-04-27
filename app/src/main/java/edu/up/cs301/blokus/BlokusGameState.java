@@ -75,6 +75,8 @@ public class BlokusGameState extends GameState implements Serializable
     // 4x21 array, stores each player's remaining pieces
     private int[][] playerPieces;
 
+    private ArrayList<Blok> validCorners;
+
     // use for master copy
     public BlokusGameState()
     {
@@ -91,7 +93,7 @@ public class BlokusGameState extends GameState implements Serializable
         piecePreview = new Blok[7][7];
         resetPreview();
 
-        validCorners = new ArrayList<Blok>();
+        validCorners = new ArrayList<>();
 
         playerPieces = new int[4][21];
         for(int i = 0; i < 4; i++)

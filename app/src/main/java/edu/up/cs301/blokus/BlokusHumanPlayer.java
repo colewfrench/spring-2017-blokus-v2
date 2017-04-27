@@ -437,6 +437,9 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                         displayButtons[i][j].setBackgroundResource(R.drawable.player4_blok);
                         displayButtons[i][j].setActivated(true);
                         break;
+                    default:
+                        displayButtons[i][j].setBackgroundResource(R.drawable.preview_background_blok);
+                        break;
                 }
 
                 if (displayButtons[i][j].isSelected())

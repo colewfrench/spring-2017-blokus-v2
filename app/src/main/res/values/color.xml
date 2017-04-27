@@ -12,4 +12,5 @@
     <color name="player2_color">#FFFFA500</color>
     <color name="player3_color">#FFFF00FF </color>
     <color name="player4_color">#FF89CFF0</color>
+    <color name="previewBoardColorDefault">#FFC0C0C0</color>
 </resources>
