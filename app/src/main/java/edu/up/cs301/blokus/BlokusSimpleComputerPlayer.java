@@ -50,9 +50,9 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.rotateTracker = 0;
 
         this.unplayablePieces = new int[21];
-        resetUnplayablePieces();
     }
 
+    // TODO change state to try one piece at every boardBlok
     @Override
     protected void receiveInfo(GameInfo info) {
         if (info instanceof BlokusGameState)
@@ -66,7 +66,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
             }
             else if (gameState.getPlayerTurn() == this.playerNum)
             {
-                sleep(10);
+                sleep(50);
                 decideAction();
                 game.sendAction(curAction);
             }
@@ -78,6 +78,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
             {
+                AI.resetUnplayablePieces(state.getPlayerPieces()[state.getPlayerTurn()]);
                 //gets arrayList of valid moves
                 ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
 
@@ -103,7 +104,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     AI.setAction(new DoNothingAction(AI, false));
                     AI.rotateTracker = 0;
                     AI.pieceBlokTracker = 0;
-                    AI.resetUnplayablePieces();
+                    //AI.resetUnplayablePieces();
                     AI.addUnplayableBlok(state.getSelectedBoardBlok());
                     return SelectBoardBlok;
                 }
@@ -205,7 +206,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     {
                         AI.pieceBlokTracker = 0;
                         AI.rotateTracker = 0;
-                        AI.resetUnplayablePieces();
                         AI.addUnplayableBlok(selectedBoardBlok);
                         return SelectBoardBlok;
                     }
@@ -228,7 +228,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
                     AI.pieceBlokTracker = 0;
                     AI.rotateTracker = 0;
-                    AI.resetUnplayablePieces();
                     AI.clearUnplayableBloks();
                     return SelectBoardBlok;
                 }
@@ -256,12 +255,9 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.unplayablePieces[pieceID] = -1;
     }
 
-    public void resetUnplayablePieces()
+    public void resetUnplayablePieces(int[] playerPieces)
     {
-        for (int i = 0; i < 21; i++)
-        {
-            this.unplayablePieces[i] = i;
-        }
+        System.arraycopy(playerPieces, 0, this.unplayablePieces, 0, playerPieces.length);
     }
 
     public boolean hasNoPiecesRemaining()
