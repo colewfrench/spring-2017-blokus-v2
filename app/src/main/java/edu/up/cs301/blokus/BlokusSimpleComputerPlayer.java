@@ -29,8 +29,8 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
     private GameAction curAction;
     private AIState curState;
     public int rotateTracker;
-
-    private int[] unplayablePieces;
+    public int changePieceTracker;
+    public int[] unplayablePieces;
 
     static Random r;
     /**
@@ -42,11 +42,11 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         super(name);
         curState = AIStates.SelectPiece;
         r = new Random();
-        unplayablePieces = new int[21];
-        for (int i = 0; i < 21; i++)
-        {
-            unplayablePieces[i] = i;
-        }
+        this.changePieceTracker = 0;
+        this.rotateTracker = 0;
+
+        this.unplayablePieces = new int[21];
+        resetUnplayablePieces();
     }
 
     @Override
@@ -89,31 +89,21 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 return SelectPieceBlok;
             }
         },
-        SelectBoardBlok {
-            @Override
-            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
-            {
-                //gets arrayList of valid moves
-                ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
-
-                Blok selectedBoardBlok = cpValidMoves.get(r.nextInt(cpValidMoves.size()));
-
-                SelectValidBlokOnBoardAction svboba =
-                        new SelectValidBlokOnBoardAction(AI, selectedBoardBlok);
-
-                AI.setAction(svboba);
-                return ConfirmPlacement;
-            }
-        },
         SelectPieceBlok {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
             {
                 PieceTemplate selectedPiece = state.getSelectedPiece();
 
-                PieceBlok[] bloksOnPiece = selectedPiece.getPieceShape();
+                if (AI.changePieceTracker == selectedPiece.getPieceShape().length)
+                {
+                    AI.changePieceTracker = 0;
+                    AI.setAction(new DoNothingAction(AI, false));
+                    AI.setPieceUnplayable(selectedPiece.getPieceId());
+                    return SelectPiece;
+                }
 
-                int selectedBlokID = r.nextInt(bloksOnPiece.length);
+                int selectedBlokID = AI.changePieceTracker;
 
                 SelectBlokOnSelectedPieceAction sbospa =
                         new SelectBlokOnSelectedPieceAction(AI, selectedBlokID);
@@ -155,12 +145,28 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 if (AI.rotateTracker == 9)
                 {
                     AI.rotateTracker = 0;
-                    tempState = SelectPiece;
-                    AI.setPieceIDUnplayable(state.getSelectedPiece().getPieceId());
+                    tempState = SelectPieceBlok;
+                    AI.changePieceTracker++;
                 }
 
                 AI.setAction(tempAction);
                 return tempState;
+            }
+        },
+        SelectBoardBlok {
+            @Override
+            public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
+            {
+                //gets arrayList of valid moves
+                ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
+
+                Blok selectedBoardBlok = cpValidMoves.get(r.nextInt(cpValidMoves.size()));
+
+                SelectValidBlokOnBoardAction svboba =
+                        new SelectValidBlokOnBoardAction(AI, selectedBoardBlok);
+
+                AI.setAction(svboba);
+                return ConfirmPlacement;
             }
         },
         ConfirmPlacement {
@@ -172,17 +178,27 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 int selectedPieceBlokId = state.getSelectedPieceBlokId();
                 Blok[][] board = state.getBoardState();
 
-                if (state.prepareValidMove(selectedBoardBlok,
+                if (state.prepareValidMove(selectedBoardBlok, // if invalid move
                         selectedPiece,
                         selectedPieceBlokId,
                         board) == null)
                 {
                     AI.setAction(new DoNothingAction(AI, false));
-                    return Rotate;
+                    if (AI.changePieceTracker == selectedPiece.getPieceShape().length)
+                    {
+                        AI.changePieceTracker = 0;
+                        AI.setPieceUnplayable(selectedPiece.getPieceId());
+                        return SelectPiece;
+                    }
+                    else
+                    {
+                        return Rotate;
+                    }
                 }
                 else
                 {
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
+                    AI.changePieceTracker = 0;
                     AI.resetUnplayablePieces();
                     return SelectPiece;
                 }
@@ -200,14 +216,14 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.curAction = action;
     }
 
-    public boolean isPieceUnplayable(int pieceID)
+    public boolean isPieceUnplayable(int pieceIndex)
     {
-        return (unplayablePieces[pieceID] == -1);
+        return (this.unplayablePieces[pieceIndex] == -1);
     }
 
-    public void setPieceIDUnplayable(int pieceIndex)
+    public void setPieceUnplayable(int pieceID)
     {
-        this.unplayablePieces[pieceIndex] = -1;
+        this.unplayablePieces[pieceID] = -1;
     }
 
     public void resetUnplayablePieces()
