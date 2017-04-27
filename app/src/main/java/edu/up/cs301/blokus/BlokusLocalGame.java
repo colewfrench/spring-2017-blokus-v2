@@ -183,19 +183,19 @@ public class BlokusLocalGame extends LocalGame {
         switch(winner)
         {
             case 0:
-                scoreMessage = "Player 1 Wins!";
+                scoreMessage = "Player 1 Wins! Points: "+ pointsPerPlayer[1];
                 break;
 
             case 1:
-                scoreMessage = "Player 2 Wins!";
+                scoreMessage = "Player 2 Wins! Points: "+ pointsPerPlayer[2];
                 break;
 
             case 2:
-                scoreMessage = "Player 3 Wins!";
+                scoreMessage = "Player 3 Wins! Points: "+ pointsPerPlayer[3];
                 break;
 
             case 3:
-                scoreMessage = "Player 4 Wins!";
+                scoreMessage = "Player 4 Wins! Points: "+ pointsPerPlayer[4];
                 break;
         }
 
