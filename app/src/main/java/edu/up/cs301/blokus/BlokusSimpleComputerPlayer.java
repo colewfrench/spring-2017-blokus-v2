@@ -30,7 +30,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
     private AIState curState;
     public int rotateTracker;
 
-    private Hashtable<Integer,int[]> PlayedPieceBloks = new Hashtable<>();
+    private int[] unplayablePieces;
 
     static Random r;
     /**
@@ -42,6 +42,11 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         super(name);
         curState = AIStates.SelectPiece;
         r = new Random();
+        unplayablePieces = new int[21];
+        for (int i = 0; i < 21; i++)
+        {
+            unplayablePieces[i] = i;
+        }
     }
 
     @Override
@@ -68,14 +73,14 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
             {
-                int[][] pieces = state.getPlayerPieces();
+                int[] AIPieces = state.getPlayerPieces()[state.getPlayerTurn()];
                 int pieceIndex, pieceID;
                 //find piece to play
                 do {
                     //gets random number between 0 & 20
                     pieceIndex = r.nextInt(21);
-                    pieceID = pieces[state.getPlayerTurn()][pieceIndex];
-                } while (pieceID == -1);
+                    pieceID = AIPieces[pieceIndex];
+                } while (pieceID == -1 || AI.isPieceUnplayable(pieceIndex));
 
                 SelectPieceTemplateAction spta =
                         new SelectPieceTemplateAction(AI, pieceID);
@@ -151,8 +156,8 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 {
                     AI.rotateTracker = 0;
                     tempState = SelectPiece;
+                    AI.setPieceIDUnplayable(state.getSelectedPiece().getPieceId());
                 }
-
 
                 AI.setAction(tempAction);
                 return tempState;
@@ -178,6 +183,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 else
                 {
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
+                    AI.resetUnplayablePieces();
                     return SelectPiece;
                 }
             }
@@ -192,5 +198,23 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
     public void setAction(GameAction action)
     {
         this.curAction = action;
+    }
+
+    public boolean isPieceUnplayable(int pieceID)
+    {
+        return (unplayablePieces[pieceID] == -1);
+    }
+
+    public void setPieceIDUnplayable(int pieceIndex)
+    {
+        this.unplayablePieces[pieceIndex] = -1;
+    }
+
+    public void resetUnplayablePieces()
+    {
+        for (int i = 0; i < 21; i++)
+        {
+            this.unplayablePieces[i] = i;
+        }
     }
 }
