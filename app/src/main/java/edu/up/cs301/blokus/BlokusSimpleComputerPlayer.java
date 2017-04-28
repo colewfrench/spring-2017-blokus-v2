@@ -152,8 +152,8 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     AI.removePlayableBlok(state.getSelectedBoardBlok());
                     return SelectBoardBlok;
                 }
-
-                Log.d("Valid Corners: ", "                      " + AI.getPlayableCorners().size());
+                // TODO used for testing
+                //Log.d("Valid Corners: ", "                      " + AI.getPlayableCorners().size());
 
                 int selectedBlokID = AI.pieceBlokTracker;
 
