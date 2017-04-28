@@ -3,7 +3,6 @@ package edu.up.cs301.blokus;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Random;
 
 import edu.up.cs301.blokus.actions.ConfirmPiecePlacementAction;

@@ -1,5 +1,11 @@
 package edu.up.cs301.blokus;
 
+/**
+ * Created by sterba19 on 4/27/2017.
+ */
+
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,13 +21,10 @@ import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
 
-/**
- * Created by sterba19 on 4/27/2017.
- */
-public class TestAdvAI extends GameComputerPlayer {
+public class TestAdvAI2 extends GameComputerPlayer{
 
     interface AIState {
-        AIState checkState(TestAdvAI AI, BlokusGameState state);
+        AIState checkState(TestAdvAI2 AI, BlokusGameState state);
     }
 
     private BlokusGameState gameState;
@@ -29,12 +32,9 @@ public class TestAdvAI extends GameComputerPlayer {
     private AIState curState;
     public int rotateTracker;
     public int pieceBlokTracker;
-    public int[] unplayablePieces;
-    private ArrayList<Blok> unplayableBoardBloks;
     public int[] playablePieces;
-
-
-    private int sizeTracker = 20;
+    private ArrayList<Blok> playableBoardBloks;
+    public int sizeTracker;
 
     static Random r;
     /**
@@ -42,20 +42,21 @@ public class TestAdvAI extends GameComputerPlayer {
      *
      * @param name the player's name (e.g., "John")
      */
-    public TestAdvAI(String name) {
+    public TestAdvAI2(String name) {
         super(name);
-        curState = AIStates.SelectBoardBlok;
+        curState = AIStates.SetupStartOfTurn;
         r = new Random();
 
-        this.unplayableBoardBloks = new ArrayList<>();
+        this.playableBoardBloks = new ArrayList<>();
 
         this.pieceBlokTracker = 0;
         this.rotateTracker = 0;
+        this.sizeTracker = 20;
 
-        this.unplayablePieces = new int[21];
+        this.playablePieces = new int[21];
     }
 
-
+    // TODO change state to try one piece at every boardBlok
     @Override
     protected void receiveInfo(GameInfo info) {
         if (info instanceof BlokusGameState)
@@ -79,64 +80,35 @@ public class TestAdvAI extends GameComputerPlayer {
     enum AIStates implements AIState {
         SetupStartOfTurn {
             @Override
-            public AIState checkState(TestAdvAI AI, BlokusGameState state)
+            public AIState checkState(TestAdvAI2 AI, BlokusGameState state)
             {
                 AI.setAction(new DoNothingAction(AI, false));
                 AI.resetPlayablePieces(state.getPlayerPieces()[AI.playerNum]);
                 AI.rotateTracker = 0;
                 AI.pieceBlokTracker = 0;
+                AI.sizeTracker = 20;
 
-                return SelectPiece;
-            }
-        },
-        SelectBoardBlok {
-            @Override
-            public AIState checkState(TestAdvAI AI, BlokusGameState state)
-            {
-                AI.resetUnplayablePieces(state.getPlayerPieces()[state.getPlayerTurn()]);
-                //gets arrayList of valid moves
-                ArrayList<Blok> cpValidMoves = state.getValidCorners(state.getPlayerTurn());
-
-                ArrayList<Blok> unplayableMoves = AI.getUnplayableBloks();
-
-                cpValidMoves.removeAll(unplayableMoves);
-
-                Blok selectedBoardBlok = cpValidMoves.get(r.nextInt(cpValidMoves.size()));
-
-                SelectValidBlokOnBoardAction svboba =
-                        new SelectValidBlokOnBoardAction(AI, selectedBoardBlok);
-
-                AI.setAction(svboba);
                 return SelectPiece;
             }
         },
         SelectPiece {
             @Override
-            public AIState checkState(TestAdvAI AI, BlokusGameState state)
+            public AIState checkState(TestAdvAI2 AI, BlokusGameState state)
             {
-                if (AI.hasNoPiecesRemaining())
-                {
-                    AI.setAction(new DoNothingAction(AI, false));
-                    AI.rotateTracker = 0;
-                    AI.pieceBlokTracker = 0;
-                    //AI.resetUnplayablePieces();
-                    AI.addUnplayableBlok(state.getSelectedBoardBlok());
-                    return SelectBoardBlok;
-                }
 
                 int[] AIPieces = state.getPlayerPieces()[state.getPlayerTurn()];
                 int pieceID;
                 //find piece to play
                 do {
-                    pieceID = AIPieces[AI.getSizeTracker()];
+                    pieceID = AIPieces[AI.sizeTracker];
 
                     if (pieceID == -1)
                     {
-                        AI.setSizeTracker(AI.getSizeTracker()-1);
+                        AI.sizeTracker = AI.sizeTracker-1;
                     }
-                } while (pieceID == -1 && AI.getSizeTracker() >= 0);
+                } while (pieceID == -1 && AI.sizeTracker >= 0);
 
-                if(AI.getSizeTracker() == -1)
+                if(AI.sizeTracker == -1)
                 {
                     AI.setAction(new DoNothingAction(AI, true));
                 }
@@ -147,23 +119,53 @@ public class TestAdvAI extends GameComputerPlayer {
 
                     AI.setAction(spta);
                 }
+                return SelectBoardBlok;
+            }
+        },
+        SelectBoardBlok {
+            @Override
+            public AIState checkState(TestAdvAI2 AI, BlokusGameState state)
+            {
+                if (AI.getPlayableCorners().isEmpty())
+                {
+                    AI.setAction(new DoNothingAction(AI, false));
+                    AI.rotateTracker = 0;
+                    AI.pieceBlokTracker = 0;
+                    AI.sizeTracker = AI.sizeTracker-1;
+                    AI.setPieceUnplayable(state.getSelectedPiece().getPieceId());
+                    return SelectPiece;
+                }
+
+                //gets arrayList of valid moves
+                ArrayList<Blok> validBloks = AI.getPlayableCorners();
+
+                Blok tempBlok = validBloks.get(r.nextInt(validBloks.size()));
+
+                Blok selectedBoardBlok = state.getBoardState()[tempBlok.getRow()][tempBlok.getColumn()];
+
+                SelectValidBlokOnBoardAction svboba =
+                        new SelectValidBlokOnBoardAction(AI, selectedBoardBlok);
+
+                AI.setAction(svboba);
                 return SelectPieceBlok;
             }
         },
         SelectPieceBlok {
             @Override
-            public AIState checkState(TestAdvAI AI, BlokusGameState state)
+            public AIState checkState(TestAdvAI2 AI, BlokusGameState state)
             {
                 PieceTemplate selectedPiece = state.getSelectedPiece();
 
                 if (AI.pieceBlokTracker == selectedPiece.getPieceShape().length)
                 {
-                    AI.pieceBlokTracker = 0;
                     AI.setAction(new DoNothingAction(AI, false));
-                    AI.setPieceUnplayable(selectedPiece.getPieceId());
-                    AI.setSizeTracker(AI.getSizeTracker()-1);
+                    AI.pieceBlokTracker = 0;
+                    AI.rotateTracker = 0;
+                    AI.removePlayableBlok(state.getSelectedBoardBlok());
                     return SelectBoardBlok;
                 }
+
+                Log.d("Valid Corners: ", "                      " + AI.getPlayableCorners().size());
 
                 int selectedBlokID = AI.pieceBlokTracker;
 
@@ -176,9 +178,8 @@ public class TestAdvAI extends GameComputerPlayer {
         },
         Rotate {
             @Override
-            public AIState checkState(TestAdvAI AI, BlokusGameState state)
+            public AIState checkState(TestAdvAI2 AI, BlokusGameState state)
             {
-                AIState tempState = ConfirmPlacement;
                 GameAction tempAction = new DoNothingAction(AI, false);
                 switch (AI.rotateTracker)
                 {
@@ -199,22 +200,23 @@ public class TestAdvAI extends GameComputerPlayer {
                         break;
                 }
 
+                AI.setAction(tempAction);
                 AI.rotateTracker++;
 
                 if (AI.rotateTracker == 9)
                 {
                     AI.rotateTracker = 0;
-                    tempState = SelectPieceBlok;
                     AI.pieceBlokTracker++;
+
+                    return SelectPieceBlok;
                 }
 
-                AI.setAction(tempAction);
-                return tempState;
+                return ConfirmPlacement;
             }
         },
         ConfirmPlacement {
             @Override
-            public AIState checkState(TestAdvAI AI, BlokusGameState state)
+            public AIState checkState(TestAdvAI2 AI, BlokusGameState state)
             {
                 Blok selectedBoardBlok = state.getSelectedBoardBlok();
                 PieceTemplate selectedPiece = state.getSelectedPiece();
@@ -227,35 +229,14 @@ public class TestAdvAI extends GameComputerPlayer {
                         board) == null)
                 {
                     AI.setAction(new DoNothingAction(AI, false));
-                    // all pieces attempted at this boardBlok
-                    if (AI.hasNoPiecesRemaining())
-                    {
-                        AI.pieceBlokTracker = 0;
-                        AI.rotateTracker = 0;
-                        AI.addUnplayableBlok(selectedBoardBlok);
-                        return SelectBoardBlok;
-                    }
 
-                    // all pieceBloks attempted for this piece at this boardBlok
-                    else if (AI.pieceBlokTracker == selectedPiece.getPieceShape().length)
-                    {
-                        AI.pieceBlokTracker = 0;
-                        AI.rotateTracker = 0;
-                        AI.setPieceUnplayable(selectedPiece.getPieceId());
-                        return SelectPiece;
-                    }
-                    else
-                    {
-                        return Rotate;
-                    }
+                    return Rotate;
                 }
                 else
                 {
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
-                    AI.pieceBlokTracker = 0;
-                    AI.rotateTracker = 0;
-                    AI.clearUnplayableBloks();
-                    return SelectBoardBlok;
+
+                    return SetupStartOfTurn;
                 }
             }
         }
@@ -273,51 +254,17 @@ public class TestAdvAI extends GameComputerPlayer {
 
     public boolean isPieceUnplayable(int pieceIndex)
     {
-        return (this.unplayablePieces[pieceIndex] == -1);
+        return (this.playablePieces[pieceIndex] == -1);
+    }
+
+    public int[] getPlayablePieces()
+    {
+        return this.playablePieces;
     }
 
     public void setPieceUnplayable(int pieceID)
     {
-        this.unplayablePieces[pieceID] = -1;
-    }
-
-    public void resetUnplayablePieces(int[] playerPieces)
-    {
-        System.arraycopy(playerPieces, 0, this.unplayablePieces, 0, playerPieces.length);
-    }
-
-    public boolean hasNoPiecesRemaining()
-    {
-        for (int i = 0; i < 21; i++)
-        {
-            if (this.unplayablePieces[i] != -1)
-                return false;
-        }
-
-        return true;
-    }
-
-    public ArrayList<Blok> getUnplayableBloks()
-    {
-        return this.unplayableBoardBloks;
-    }
-
-    public void addUnplayableBlok(Blok unplayableBlok)
-    {
-        this.unplayableBoardBloks.add(unplayableBlok);
-    }
-
-    public void clearUnplayableBloks()
-    {
-        this.unplayableBoardBloks.clear();
-    }
-
-    public int getSizeTracker() {
-        return sizeTracker;
-    }
-
-    public void setSizeTracker(int sizeTracker) {
-        this.sizeTracker = sizeTracker;
+        this.playablePieces[pieceID] = -1;
     }
 
     public void resetPlayablePieces(int[] playerPieces)
@@ -325,5 +272,31 @@ public class TestAdvAI extends GameComputerPlayer {
         System.arraycopy(playerPieces, 0, this.playablePieces, 0, playerPieces.length);
     }
 
+    public ArrayList<Blok> getPlayableCorners()
+    {
+        return this.playableBoardBloks;
+    }
 
+    public void setPlayableCorners(ArrayList<Blok> validCorners)
+    {
+        this.playableBoardBloks = validCorners;
+    }
+
+    public void removePlayableBlok(Blok unplayableBlok)
+    {
+        int row = unplayableBlok.getRow();
+        int column = unplayableBlok.getColumn();
+
+        int i;
+
+        for (i = 0; i < playableBoardBloks.size(); i++)
+        {
+            Blok tempBlok = playableBoardBloks.get(i);
+
+            if (tempBlok.getRow() == row && tempBlok.getColumn() == column)
+                break;
+        }
+
+        this.playableBoardBloks.remove(i);
+    }
 }
