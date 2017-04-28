@@ -40,7 +40,6 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected boolean canMove(int playerIdx) {
-        Log.d("entered canMove", "yes");
         return (gameState.getPlayerTurn() == playerIdx);
     }
 
@@ -110,7 +109,6 @@ public class BlokusLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
-        Log.d("entered", "checking game over");
         for(int i=0; i<4; i++)
         {
             if (gameState.playerCanMove(i))
@@ -118,8 +116,6 @@ public class BlokusLocalGame extends LocalGame {
                 return null;
             }
         }
-
-        Log.d("Game is Over", "True");
 
         Blok[][] boardState = gameState.getBoardState();
         int[] pointsPerPlayer = new int[4];
@@ -174,7 +170,6 @@ public class BlokusLocalGame extends LocalGame {
         {
             if(pointsPerPlayer[i]> maxPoints)
             {
-                Log.d("Player" + (i+1) + "Score", "" + pointsPerPlayer[i]);
                 maxPoints = pointsPerPlayer[i];
                 winner = i;
             }
@@ -183,19 +178,19 @@ public class BlokusLocalGame extends LocalGame {
         switch(winner)
         {
             case 0:
-                scoreMessage = "Player 1 Wins! Your OOki Points: "+ pointsPerPlayer[1];
+                scoreMessage = "Player 1 Wins! Your OOki Points: "+ pointsPerPlayer[0];
                 break;
 
             case 1:
-                scoreMessage = "Player 2 Wins! Your OOki Points: "+ pointsPerPlayer[2];
+                scoreMessage = "Player 2 Wins! Your OOki Points: "+ pointsPerPlayer[1];
                 break;
 
             case 2:
-                scoreMessage = "Player 3 Wins! Your OOki Points: "+ pointsPerPlayer[3];
+                scoreMessage = "Player 3 Wins! Your OOki Points: "+ pointsPerPlayer[2];
                 break;
 
             case 3:
-                scoreMessage = "Player 4 Wins! Your OOki Points: "+ pointsPerPlayer[4];
+                scoreMessage = "Player 4 Wins! Your OOki Points: "+ pointsPerPlayer[3];
                 break;
         }
 

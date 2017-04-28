@@ -461,7 +461,6 @@ public class BlokusGameState extends GameState implements Serializable
                 selectedPieceBlokId == -1 ||
                 selectedBoardBlok == null)
         {
-            Log.d("receivedConfirm", "move invalid");
             return false;
         }
 
@@ -859,7 +858,6 @@ public class BlokusGameState extends GameState implements Serializable
         Blok curBoardBlok;
 
         ArrayList<Blok> validCorners = getValidCorners(playerID);
-        Log.d("valid Size", " " + validCorners.size());
 
         //Iterate over avaliable corners
         if (validCorners != null)
