@@ -153,7 +153,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     return SelectBoardBlok;
                 }
 
-                Log.d("Valid Corners: ", "" + AI.getPlayableCorners().size());
+                Log.d("Valid Corners: ", "                      " + AI.getPlayableCorners().size());
 
                 int selectedBlokID = AI.pieceBlokTracker;
 
@@ -272,6 +272,19 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
 
     public void removePlayableBlok(Blok unplayableBlok)
     {
-        this.playableBoardBloks.remove(unplayableBlok);
+        int row = unplayableBlok.getRow();
+        int column = unplayableBlok.getColumn();
+
+        int i;
+
+        for (i = 0; i < playableBoardBloks.size(); i++)
+        {
+            Blok tempBlok = playableBoardBloks.get(i);
+
+            if (tempBlok.getRow() == row && tempBlok.getColumn() == column)
+                break;
+        }
+
+        this.playableBoardBloks.remove(i);
     }
 }
