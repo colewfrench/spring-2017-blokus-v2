@@ -54,7 +54,7 @@ public class BlokusMainActivity extends GameMainActivity {
         // a computer player type (player type 2)
         playerTypes.add(new GamePlayerType("Advanced Computer Player") {
             public GamePlayer createPlayer(String name) {
-                return new TestAdvAI2(name);
+                return new BlokusAdvancedComputerPlayer(name);
             }});
 
         // Create a game configuration class for Counter:
