@@ -54,7 +54,7 @@ public class BlokusMainActivity extends GameMainActivity {
         // a computer player type (player type 2)
         playerTypes.add(new GamePlayerType("Advanced Computer Player") {
             public GamePlayer createPlayer(String name) {
-                return new BlokusAdvancedComputerPlayer(name);
+                return new TestAdvAI(name);
             }});
 
         // Create a game configuration class for Counter:
@@ -67,9 +67,9 @@ public class BlokusMainActivity extends GameMainActivity {
 
         // Add the default players to the configuration
         defaultConfig.addPlayer("Adrian", 0); // player 1: a human player
-        defaultConfig.addPlayer("Cole", 1); // player 2: a computer player
-        defaultConfig.addPlayer("Devin", 1); // player 3: a computer player
-        defaultConfig.addPlayer("Evan", 1); // player 4: a computer player
+        defaultConfig.addPlayer("Cole", 2); // player 2: a computer player
+        defaultConfig.addPlayer("Devin", 2); // player 3: a computer player
+        defaultConfig.addPlayer("Evan", 2); // player 4: a computer player
 
         // Set the default remote-player setup:
         // - player name: "Remote Player"

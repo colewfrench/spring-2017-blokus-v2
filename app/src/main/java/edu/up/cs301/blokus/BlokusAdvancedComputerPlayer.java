@@ -130,10 +130,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
         do {
             pieceID = pieces[this.playerNum][sizeTracker];
 
-            Log.d("Player",Integer.toString(state.getPlayerTurn()));
-            Log.d("Size Tracker", Integer.toString(sizeTracker));
-            Log.d("PieceID",Integer.toString(pieceID));
-
             if (pieceID == -1)
             {
                 sizeTracker--;
