@@ -270,6 +270,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.playableBoardBloks = validCorners;
     }
 
+    // TODO probably more efficient way to do this
     public void removePlayableBlok(Blok unplayableBlok)
     {
         int row = unplayableBlok.getRow();

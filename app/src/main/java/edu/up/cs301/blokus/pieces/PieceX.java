@@ -23,7 +23,7 @@ public class PieceX extends PieceTemplate
         }
 
         setPieceShape(myShape);
-        this.setAnchor(myShape[2]);
+        this.setAnchor(myShape[0]);
     }
 
 
