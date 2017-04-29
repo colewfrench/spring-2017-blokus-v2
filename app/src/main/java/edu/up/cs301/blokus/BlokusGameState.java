@@ -1,9 +1,5 @@
 package edu.up.cs301.blokus;
 
-
-
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -159,7 +155,6 @@ public class BlokusGameState extends GameState implements Serializable
         return initArray;
     }
 
-    // TODO test this, possibly not working
     /**
      * searches the current board state for any corners that
      * the current player could possibly place a piece off of
@@ -280,8 +275,8 @@ public class BlokusGameState extends GameState implements Serializable
         selectedPieceBlok.setRow(selectedBoardBlok.getRow());
         selectedPieceBlok.setCol(selectedBoardBlok.getColumn());
 
-        ArrayList<PieceBlok> bloksToColor = new ArrayList<PieceBlok>();
-        ArrayList<PieceBlok> temp = new ArrayList<PieceBlok>();
+        ArrayList<PieceBlok> bloksToColor = new ArrayList<>();
+        ArrayList<PieceBlok> temp = new ArrayList<>();
 
         bloksToColor.add(selectedPieceBlok);
         temp.addAll(bloksToColor);
@@ -430,25 +425,6 @@ public class BlokusGameState extends GameState implements Serializable
         }
     }
 
-    public boolean piecePlacementIsValid(Blok selectedBoardBlok,
-                                         PieceTemplate selectedPiece,
-                                         int selectedPieceBlokId,
-                                         Blok[][] board)
-    {
-        if (prepareValidMove(
-                selectedBoardBlok,
-                selectedPiece,
-                selectedPieceBlokId,
-                board) == null)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
     /**
      * attempt to place the given piece on the board
      * at given location in given orientation
@@ -546,7 +522,7 @@ public class BlokusGameState extends GameState implements Serializable
 
         for (int i = 1; i < size-1; i++)
         {
-            for (int j = 0; j < size-1; j++)
+            for (int j = 1; j < size-1; j++)
             {
                 piecePreview[i][j] = new Blok(i, j, EMPTY_BLOK, EMPTY_BLOK);
             }
@@ -692,10 +668,7 @@ public class BlokusGameState extends GameState implements Serializable
             int[] copyAdj = copyShape[i].getAdjacencies();
             int[] origAdj = origShape[i].getAdjacencies();
 
-            for (int j = 0; j < 4; j++)
-            {
-                copyAdj[j] = origAdj[j];
-            }
+            System.arraycopy(origAdj, 0, copyAdj, 0, origAdj.length);
 
             copyShape[i].setAdjacencies(copyAdj);
         }
@@ -730,10 +703,7 @@ public class BlokusGameState extends GameState implements Serializable
 
         for (int i = 0; i < 4; i++)
         {
-            for (int j = 0; j < 21; j++)
-            {
-                copyPieces[i][j] = origPieces[i][j];
-            }
+            System.arraycopy(origPieces[i], 0, copyPieces[i], 0, origPieces[i].length);
         }
 
         return copyPieces;
@@ -903,11 +873,11 @@ public class BlokusGameState extends GameState implements Serializable
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < 4; j++) {
-                if (piecePlacementIsValid(
+                if (prepareValidMove(
                         selectedBoardBlok,
                         selectedPiece,
                         pieceBlokId,
-                        board)) {
+                        board) != null) {
                     return true;
                 }
                 selectedPiece.rotate();

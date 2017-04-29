@@ -67,7 +67,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 }
                 else
                 {
-                    sleep(45);
+                    sleep(50);
                     decideActionByState();
                     game.sendAction(curAction);
                 }
@@ -249,9 +249,10 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.playablePieces[pieceID] = -1;
     }
 
-    public void resetPlayablePieces(int[] playerPieces)
+    public void resetPlayablePieces(int[] playerCurrentPieces)
     {
-        System.arraycopy(playerPieces, 0, this.playablePieces, 0, playerPieces.length);
+        System.arraycopy(playerCurrentPieces, 0, this.playablePieces,
+                0, playerCurrentPieces.length);
     }
 
     public ArrayList<Blok> getPlayableCorners()

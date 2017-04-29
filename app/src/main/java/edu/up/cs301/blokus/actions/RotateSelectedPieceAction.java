@@ -21,7 +21,6 @@ public class RotateSelectedPieceAction extends GameAction implements Serializabl
      */
     public RotateSelectedPieceAction(GamePlayer player) {
         super(player);
-
     }
 }
 

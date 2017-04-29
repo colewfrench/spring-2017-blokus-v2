@@ -34,7 +34,8 @@ import edu.up.cs301.game.infoMsg.NotYourTurnInfo;
  */
 public class BlokusHumanPlayer extends GameHumanPlayer {
 
-    private GameMainActivity activity;
+    private static final int SELECTED_CORNER_PADDING = 15;
+    private static final int SELECTED_PREVIEW_BLOK_PADDING = 10;
 
     // constant value for number of pieces
     private static final int NUM_PIECES = 21;
@@ -44,6 +45,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     private static final int TILE_SIZE = 76; // in pixels
     private static final int PREVIEW_BOARD_SIZE = 5;
     private static final int SAMPLE_PIECE_TILE_SIZE = 62; // in pixels
+
+    private GameMainActivity activity;
 
     //global variables for buttons
     private Button rotateButton;
@@ -58,8 +61,10 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
     private PieceTemplate selectedPiece = null;
     private Blok[][] previewBoard = null;
+    private Blok selectedBoardBlok = null;
+    private int selectedPieceBlokID = -1;
 
-    BlokusGameState newState;
+    private BlokusGameState newState;
 
     /**
      * constructor
@@ -79,52 +84,38 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     public void receiveInfo(GameInfo info) {
         if (info instanceof BlokusGameState)
         {
-            //enablePlayerInput();
-            newState = (BlokusGameState)info;
-
-            // if the current player has no available moves, skip his turn
-            if (!newState.playerCanMove(this.playerNum))
-            {
-                game.sendAction(new DoNothingAction(this, true));
-            }
-
-            if (newState.getBoardState() != null) {
-                updateGUIBoard();
-            }
-
+            this.newState = (BlokusGameState)info;
             this.previewBoard = newState.getPiecePreview();
             this.selectedPiece = newState.getSelectedPiece();
+            this.selectedBoardBlok = newState.getSelectedBoardBlok();
+            this.selectedPieceBlokID = newState.getSelectedPieceBlokId();
 
-            if (previewBoard != null) {
-                updatePreviewBoard();
-            }
-
+            updateGUIBoard();
+            updatePreviewBoard();
             updatePieceButtons();
 
             if (newState.getPlayerTurn() == this.playerNum)
             {
-                rotateButton.setBackgroundColor(Color.YELLOW);
-                flipButton.setBackgroundColor(Color.YELLOW);
-                updateConfirmButton();
+                // if the current player has no available moves, skip his turn
+                if (!newState.playerCanMove(this.playerNum))
+                {
+                    game.sendAction(new DoNothingAction(this, true));
+                }
+                else
+                {
+                    enablePlayerInput();
+                    rotateButton.setBackgroundColor(Color.YELLOW);
+                    flipButton.setBackgroundColor(Color.YELLOW);
+                    updateConfirmButton();
+                }
             }
             else
             {
+                disablePlayerInput();
                 rotateButton.setBackgroundColor(Color.RED);
                 flipButton.setBackgroundColor(Color.RED);
                 confirmButton.setBackgroundColor(Color.RED);
             }
-        }
-
-        if (info instanceof NotYourTurnInfo)
-        {
-            flash(Color.RED, 1000);
-
-            /*
-            //disablePlayerInput();
-            confirmButton.setBackgroundColor(Color.RED);
-            rotateButton.setBackgroundColor(Color.RED);
-            flipButton.setBackgroundColor(Color.RED);
-            */
         }
     }
 
@@ -159,7 +150,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     {
         for (int i = 0; i < pieceButtons.length; i++)
         {
-            pieceButtons[i].setOnClickListener(null);
+            pieceButtons[i].setOnClickListener(l);
         }
     }
 
@@ -215,8 +206,6 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         // create a 5x5 grid that allows the player
         // to preview the orientation of their selected piece
         initPiecePreviewDisplay();
-
-
     }
 
     /**
@@ -360,7 +349,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
      */
     private void updateGUIBoard()
     {
-
+        resetSelectedBoardSpaces(boardButtons);
+        setBoardBlokSelected();
 
         for (int i = 0; i < BOARD_SIZE; i++)
         {
@@ -387,7 +377,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
                 if (boardButtons[i][j].isSelected())
                 {
-                    displayAsSelectedCorner(boardButtons[i][j], 15);
+                    displayAsSelectedCorner(boardButtons[i][j], SELECTED_CORNER_PADDING);
                 }
                 else
                 {
@@ -414,6 +404,9 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
      */
     private void updatePreviewBoard()
     {
+        resetSelectedBoardSpaces(displayButtons);
+        setPieceBlokSelected();
+
         for (int i = 0; i < PREVIEW_BOARD_SIZE; i++)
         {
             for (int j = 0; j < PREVIEW_BOARD_SIZE; j++)
@@ -446,7 +439,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
                 if (displayButtons[i][j].isSelected())
                 {
-                    displayAsValidCorner(displayButtons[i][j], 10);
+                    displayAsValidCorner(displayButtons[i][j], SELECTED_PREVIEW_BLOK_PADDING);
                 }
                 else
                 {
@@ -486,8 +479,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             return;
         }
 
-        if (newState.piecePlacementIsValid(
-                blok, piece, pieceBlokId, newState.getBoardState()))
+        if (newState.prepareValidMove(
+                blok, piece, pieceBlokId, newState.getBoardState()) != null)
         {
             confirmButton.setBackgroundColor(Color.GREEN);
         }
@@ -503,52 +496,12 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         button.setPadding(padding,padding,padding,padding);
         button.setScaleType(ImageView.ScaleType.FIT_XY);
     }
+
     private void displayAsSelectedCorner(ImageButton button, int padding)
     {
         button.setImageResource(R.drawable.circle_target);
         button.setPadding(padding,padding,padding,padding);
         button.setScaleType(ImageView.ScaleType.FIT_XY);
-    }
-
-    //Listener for BoardButtons
-    public class BlokButtonListener implements Button.OnClickListener {
-
-        public void onClick(View v)
-        {
-            // one of the buttons on the 20x20 grid
-            if (v instanceof BoardButton)
-            {
-                int row = ((BoardButton) v).getRow();
-                int col = ((BoardButton) v).getCol();
-                Blok selectedBlok = newState.getBoardState()[row+1][col+1];
-
-                if (blokIsValid(selectedBlok))
-                {
-                    resetSelectedBoardSpaces(boardButtons);
-                    boardButtons[row][col].setSelected(true);
-                    game.sendAction(new SelectValidBlokOnBoardAction(
-                            BlokusHumanPlayer.this, selectedBlok));
-                }
-            }
-
-            // one of the buttons on the 5x5 grid
-            if ((v instanceof PieceDisplayButton) && (v.isActivated()))
-            {
-                int row = ((PieceDisplayButton) v).getRow();
-                int col = ((PieceDisplayButton) v).getCol();
-                int id = previewBoard[row+1][col+1].getId();
-                // because previewBoard is 7x7 and displayButtons is 5x5
-
-                if (selectedPiece != null)
-                {
-                    resetSelectedBoardSpaces(displayButtons);
-                    displayButtons[row][col].setSelected(true);
-                    SelectBlokOnSelectedPieceAction selPieceBlok =
-                            new SelectBlokOnSelectedPieceAction(BlokusHumanPlayer.this, id);
-                    game.sendAction(selPieceBlok);
-                }
-            }
-        }
     }
 
     private boolean blokIsValid(Blok selectedBlok)
@@ -572,18 +525,80 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
+    private void setBoardBlokSelected()
+    {
+        if (selectedBoardBlok != null)
+        {
+            int row = this.selectedBoardBlok.getRow();
+            int col = this.selectedBoardBlok.getColumn();
+
+            boardButtons[row-1][col-1].setSelected(true);
+        }
+    }
+
+    private void setPieceBlokSelected()
+    {
+        for (int i = 0; i < displayButtons.length; i++)
+        {
+            for (int j = 0; j < displayButtons.length; j++)
+            {
+                if (this.selectedPieceBlokID >= 0 &&
+                        this.selectedPieceBlokID == previewBoard[i+1][j+1].getId())
+                {
+                    displayButtons[i][j].setSelected(true);
+                }
+            }
+        }
+    }
+
+    //Listener for BoardButtons
+    public class BlokButtonListener implements Button.OnClickListener {
+
+        public void onClick(View v)
+        {
+            // one of the buttons on the 20x20 grid
+            if (v instanceof BoardButton)
+            {
+                int row = ((BoardButton) v).getRow();
+                int col = ((BoardButton) v).getCol();
+                Blok selectedBlok = newState.getBoardState()[row+1][col+1];
+
+                if (blokIsValid(selectedBlok))
+                {
+                    game.sendAction(new SelectValidBlokOnBoardAction(
+                            BlokusHumanPlayer.this, selectedBlok));
+                }
+            }
+
+            // one of the buttons on the 5x5 grid
+            if ((v instanceof PieceDisplayButton) && (v.isActivated()))
+            {
+                int row = ((PieceDisplayButton) v).getRow();
+                int col = ((PieceDisplayButton) v).getCol();
+                int id = previewBoard[row+1][col+1].getId();
+                // because previewBoard is 7x7 and displayButtons is 5x5
+
+                if (selectedPiece != null)
+                {
+                    SelectBlokOnSelectedPieceAction selPieceBlok =
+                            new SelectBlokOnSelectedPieceAction(BlokusHumanPlayer.this, id);
+                    game.sendAction(selPieceBlok);
+                }
+            }
+        }
+    }
+
     public class PieceControlListener implements Button.OnClickListener {
 
         public void onClick(View v) {
             resetSelectedBoardSpaces(displayButtons);
+
             if (v == confirmButton)
             {
-                updatePreviewBoard();
                 resetSelectedBoardSpaces(boardButtons);
                 ConfirmPiecePlacementAction confirm =
                         new ConfirmPiecePlacementAction(BlokusHumanPlayer.this);
                 game.sendAction(confirm);
-                //game.sendAction(new DoNothingAction(BlokusHumanPlayer.this, true));
             }
 
             if (v == rotateButton)
@@ -607,6 +622,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
         public void onClick(View v) {
             resetSelectedBoardSpaces(displayButtons);
+
             if (((PieceButton)v).isHighlighted()) //if the button selected is already highlighted
             {
                 v.setBackgroundResource(R.drawable.button_border);
@@ -619,21 +635,27 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             }
             else if( !((PieceButton) v).isHighlighted() && ((PieceButton) v).getButtonPiece() != -1) //if the button selected is not highlighted
             {
-                for (PieceButton pb: pieceButtons) //unhighlight other buttons
-                {
-                    if (pb.isHighlighted())
-                    {
-                        pb.setIsHighlighted(false);
-                        pb.setBackgroundResource(R.drawable.button_border);
-                    }
-                }
+                resetHighlightedPieceButtons(); //unhighlight other buttons
+
                 v.setBackgroundResource(R.drawable.highlighted_button_border);
                 ((PieceButton) v).setIsHighlighted(true);
                 int selectedPieceID = ((PieceButton) v).getButtonPiece();
-                SelectPieceTemplateAction sel =
+                SelectPieceTemplateAction selectPiece =
                         new SelectPieceTemplateAction(BlokusHumanPlayer.this, selectedPieceID);
 
-                game.sendAction(sel);
+                game.sendAction(selectPiece);
+            }
+        }
+    }
+
+    private void resetHighlightedPieceButtons()
+    {
+        for (PieceButton pb: pieceButtons)
+        {
+            if (pb.isHighlighted())
+            {
+                pb.setIsHighlighted(false);
+                pb.setBackgroundResource(R.drawable.button_border);
             }
         }
     }

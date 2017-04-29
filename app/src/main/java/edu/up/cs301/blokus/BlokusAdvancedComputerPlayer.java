@@ -25,9 +25,6 @@ import edu.up.cs301.game.infoMsg.GameInfo;
  * Created by lowa19 on 3/5/2017.
  */
 
-
-
-
 public class BlokusAdvancedComputerPlayer extends GameComputerPlayer {
 
     private int pieceID, actionTracker = 0, rotationTracker = 0, sizeTracker = 20;
