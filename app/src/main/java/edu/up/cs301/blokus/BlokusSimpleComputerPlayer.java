@@ -1,7 +1,5 @@
 package edu.up.cs301.blokus;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,7 +16,8 @@ import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
 
 /**
- * Created by frenchco19 on 4/22/2017.
+ * @author Cole French
+ * @author Evan Sterba
  */
 public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
 
@@ -69,7 +68,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 else
                 {
                     sleep(45);
-                    decideAction();
+                    decideActionByState();
                     game.sendAction(curAction);
                 }
             }
@@ -98,6 +97,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
 
                 int[] AIPieces = AI.getPlayablePieces();
                 int pieceIndex, pieceID;
+
                 //find piece to play
                 do {
                     //gets random number between 0 & 20
@@ -153,8 +153,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     AI.removePlayableBlok(state.getSelectedBoardBlok());
                     return SelectBoardBlok;
                 }
-                // TODO used for testing
-                //Log.d("Valid Corners: ", "                      " + AI.getPlayableCorners().size());
 
                 int selectedBlokID = AI.pieceBlokTracker;
 
@@ -231,7 +229,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         }
     }
 
-    private void decideAction()
+    private void decideActionByState()
     {
         curState = curState.checkState(this, gameState);
     }
@@ -239,11 +237,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
     public void setAction(GameAction action)
     {
         this.curAction = action;
-    }
-
-    public boolean isPieceUnplayable(int pieceIndex)
-    {
-        return (this.playablePieces[pieceIndex] == -1);
     }
 
     public int[] getPlayablePieces()
@@ -271,14 +264,24 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.playableBoardBloks = validCorners;
     }
 
-    // TODO probably more efficient way to do this
+    /**
+     * remove the given blok from pool of valid corners.
+     * it needs to be removed this way b/c the Bloks in
+     * the playableBoardBloks ArrayList are not from the
+     * same GameStates, so the ArrayList will never contain
+     * the reference to the given unplayable Blok
+     *
+     * @param unplayableBlok
+     *      the Blok corresponding to the one stored in the
+     *      ArrayList of valid corners, which both share
+     *      the same row,column coordinates
+     */
     public void removePlayableBlok(Blok unplayableBlok)
     {
         int row = unplayableBlok.getRow();
         int column = unplayableBlok.getColumn();
 
-        int i;
-
+        int i; // i is used outside the for loop as well
         for (i = 0; i < playableBoardBloks.size(); i++)
         {
             Blok tempBlok = playableBoardBloks.get(i);
