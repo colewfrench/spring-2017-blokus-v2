@@ -53,23 +53,25 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         this.playablePieces = new int[21];
     }
 
-    // TODO change state to try one piece at every boardBlok
     @Override
     protected void receiveInfo(GameInfo info) {
         if (info instanceof BlokusGameState)
         {
             this.gameState = (BlokusGameState)info;
 
-            // if the current player has no available moves, skip his turn
-            if (!gameState.playerCanMove(this.playerNum))
+            if (gameState.getPlayerTurn() == this.playerNum)
             {
-                game.sendAction(new DoNothingAction(this, true));
-            }
-            else if (gameState.getPlayerTurn() == this.playerNum)
-            {
-                sleep(50);
-                decideAction();
-                game.sendAction(curAction);
+                // if the current player has no available moves, skip his turn
+                if (!gameState.playerCanMove(this.playerNum))
+                {
+                    game.sendAction(new DoNothingAction(this, true));
+                }
+                else
+                {
+                    sleep(45);
+                    decideAction();
+                    game.sendAction(curAction);
+                }
             }
         }
     }
