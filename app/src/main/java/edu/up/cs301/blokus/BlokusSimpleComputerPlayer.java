@@ -145,6 +145,12 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
             {
                 PieceTemplate selectedPiece = state.getSelectedPiece();
 
+                while (AI.pieceBlokTracker < selectedPiece.getPieceShape().length &&
+                        !selectedPiece.getPieceShape()[AI.pieceBlokTracker].hasCorner())
+                {
+                    AI.pieceBlokTracker++;
+                }
+
                 if (AI.pieceBlokTracker == selectedPiece.getPieceShape().length)
                 {
                     AI.setAction(new DoNothingAction(AI, false));
@@ -174,16 +180,14 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     case 1:
                     case 2:
                     case 3:
-                        tempAction = new RotateSelectedPieceAction(AI);
-                        break;
-                    case 4:
-                        tempAction = new FlipSelectedPieceAction(AI);
-                        break;
                     case 5:
                     case 6:
                     case 7:
                     case 8:
                         tempAction = new RotateSelectedPieceAction(AI);
+                        break;
+                    case 4:
+                        tempAction = new FlipSelectedPieceAction(AI);
                         break;
                 }
 
