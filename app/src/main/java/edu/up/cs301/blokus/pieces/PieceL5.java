@@ -20,12 +20,28 @@ public class PieceL5 extends PieceTemplate
 
             //Set Adjacencies for each blok using getAdjArray method
             myShape[i].setAdjacencies(getAdjArray(i));
+            myShape[i].setHasCorner(isValidCorner(i));
         }
 
         setPieceShape(myShape);
         this.setAnchor(myShape[2]);
+
+        super.flip();
+        super.rotate();
     }
 
+    @Override
+    protected boolean isValidCorner(int pieceBlokId)
+    {
+        switch (pieceBlokId)
+        {
+            case 2:
+            case 3:
+                return false;
+            default:
+                return true;
+        }
+    }
 
     @Override
     protected int[] getAdjArray(int pieceBlokId) {

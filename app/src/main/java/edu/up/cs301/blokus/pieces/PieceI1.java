@@ -21,9 +21,20 @@ public class PieceI1 extends PieceTemplate {
         PieceBlok[] myShape = new PieceBlok[1];
         myShape[0] = new PieceBlok(0,0, BlokusGameState.EMPTY_BLOK, 0);
         myShape[0].setAdjacencies(getAdjArray(0));
+        myShape[0].setHasCorner(isValidCorner(0));
 
         setPieceShape(myShape);
         this.setAnchor(myShape[0]);
+    }
+
+    @Override
+    protected boolean isValidCorner(int pieceBlokId)
+    {
+        switch (pieceBlokId)
+        {
+            default:
+                return true;
+        }
     }
 
     @Override

@@ -580,9 +580,12 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
                 if (selectedPiece != null)
                 {
-                    SelectBlokOnSelectedPieceAction selPieceBlok =
-                            new SelectBlokOnSelectedPieceAction(BlokusHumanPlayer.this, id);
-                    game.sendAction(selPieceBlok);
+                    if (selectedPiece.getPieceShape()[id].hasCorner())
+                    {
+                        SelectBlokOnSelectedPieceAction selPieceBlok =
+                                new SelectBlokOnSelectedPieceAction(BlokusHumanPlayer.this, id);
+                        game.sendAction(selPieceBlok);
+                    }
                 }
             }
         }

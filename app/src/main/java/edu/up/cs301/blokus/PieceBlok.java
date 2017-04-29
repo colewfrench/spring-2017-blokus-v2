@@ -17,14 +17,15 @@ public class PieceBlok extends Blok {
     public static final int TOP = 1;
     public static final int RIGHT = 2;
     public static final int BOTTOM = 3;
-    private boolean attemptedBlok = false;
 
+    private boolean hasCorner;
     private int[] adjacencies;
 
     public PieceBlok(int row, int col, int color, int id)
     {
         super(row, col, color, id);
         this.adjacencies = new int[4];
+        this.hasCorner = true;
     }
 
     public int[] getAdjacencies()
@@ -39,12 +40,14 @@ public class PieceBlok extends Blok {
             this.adjacencies[i] = newAdj[i];
         }
     }
-    public void setAttemptedBlok(boolean isTried)
+
+    public boolean hasCorner()
     {
-        this.attemptedBlok = isTried;
+        return this.hasCorner;
     }
-    public boolean getAttemptedBlok()
+
+    public void setHasCorner(boolean newHasCorner)
     {
-        return this.attemptedBlok;
+        this.hasCorner = newHasCorner;
     }
 }

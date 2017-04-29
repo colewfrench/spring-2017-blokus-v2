@@ -18,11 +18,23 @@ public class PieceZ4 extends PieceTemplate {
             myShape[i] = new PieceBlok(0,0, BlokusGameState.EMPTY_BLOK, i);
             //Set Adjacencies for each blok using getAdjArray method
             myShape[i].setAdjacencies(getAdjArray(i));
+            myShape[i].setHasCorner(isValidCorner(i));
         }
         setPieceShape(myShape);
         this.setAnchor(myShape[2]);
+
+        super.flip();
     }
 
+    @Override
+    protected boolean isValidCorner(int pieceBlokId)
+    {
+        switch (pieceBlokId)
+        {
+            default:
+                return true;
+        }
+    }
 
     @Override
     protected int[] getAdjArray(int pieceBlokId) {

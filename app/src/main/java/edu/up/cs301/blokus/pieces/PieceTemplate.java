@@ -107,6 +107,9 @@ public abstract class PieceTemplate implements Serializable{
     }
 
     protected abstract int[] getAdjArray(int pieceBlokId);
+
+    protected abstract boolean isValidCorner(int pieceBlokId);
+
     public PieceBlok getAnchor()
     {
         return this.anchor;

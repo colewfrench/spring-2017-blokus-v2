@@ -20,12 +20,24 @@ public class PieceX extends PieceTemplate
 
             //Set Adjacencies for each blok using getAdjArray method
             myShape[i].setAdjacencies(getAdjArray(i));
+            myShape[i].setHasCorner(isValidCorner(i));
         }
 
         setPieceShape(myShape);
-        this.setAnchor(myShape[0]);
+        this.setAnchor(myShape[2]);
     }
 
+    @Override
+    protected boolean isValidCorner(int pieceBlokId)
+    {
+        switch (pieceBlokId)
+        {
+            case 2:
+                return false;
+            default:
+                return true;
+        }
+    }
 
     @Override
     protected int[] getAdjArray(int pieceBlokId) {
