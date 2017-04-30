@@ -16,6 +16,9 @@ public class MyNameIsAction extends GameAction {
 	
 	// the player's name
 	private String name;
+
+	// the player's ID
+	private int playerNum;
 	
 	/** constructor
 	 * 
@@ -28,6 +31,13 @@ public class MyNameIsAction extends GameAction {
 		super(p); // invoke superclass constructor
 		this.name = name; // set the name
 	}
+
+	public MyNameIsAction(GamePlayer p, String name, int playerNum)
+	{
+		super(p);
+		this.name = name;
+		this.playerNum = playerNum;
+	}
 	
 	/**
 	 * getter-method for the name
@@ -38,5 +48,8 @@ public class MyNameIsAction extends GameAction {
 	public String getName() {
 		return name;
 	}
-	
+
+	public int getPlayerNum() {
+		return this.playerNum;
+	}
 }

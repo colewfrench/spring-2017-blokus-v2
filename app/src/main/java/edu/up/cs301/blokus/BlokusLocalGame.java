@@ -13,9 +13,11 @@ import edu.up.cs301.blokus.actions.RotateSelectedPieceAction;
 import edu.up.cs301.blokus.actions.SelectBlokOnSelectedPieceAction;
 import edu.up.cs301.blokus.actions.SelectPieceTemplateAction;
 import edu.up.cs301.blokus.actions.SelectValidBlokOnBoardAction;
+import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.GamePlayer;
 import edu.up.cs301.game.LocalGame;
 import edu.up.cs301.game.actionMsg.GameAction;
+import edu.up.cs301.game.actionMsg.MyNameIsAction;
 import edu.up.cs301.game.infoMsg.GameState;
 
 
@@ -56,6 +58,7 @@ BlokusLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
+
         if (action instanceof FlipSelectedPieceAction) {
             gameState.flipSelectedPiece();
         }
@@ -180,30 +183,30 @@ BlokusLocalGame extends LocalGame {
 
         for (int i = 0; i < 4; i++)
         {
-            scoreMessage = scoreMessage + "Player " + (i+1) + " Points: "
+            scoreMessage = scoreMessage + this.playerNames[i] + "'s Score: "
                     + pointsPerPlayer[i] + "\n";
         }
 
         switch(winner)
         {
             case 0:
-                scoreMessage += "\nPlayer 1 Wins!";
+                scoreMessage += "\n" + this.playerNames[0];
                 break;
 
             case 1:
-                scoreMessage += "\nPlayer 2 Wins!";
+                scoreMessage += "\n" + this.playerNames[1];
                 break;
 
             case 2:
-                scoreMessage += "\nPlayer 3 Wins!";
+                scoreMessage += "\n" + this.playerNames[2];
                 break;
 
             case 3:
-                scoreMessage += "\nPlayer 4 Wins!";
+                scoreMessage += "\n" + this.playerNames[3];
                 break;
         }
 
-        return scoreMessage;
+        return scoreMessage + " wins!";
     }
 
 }// class CounterLocalGame

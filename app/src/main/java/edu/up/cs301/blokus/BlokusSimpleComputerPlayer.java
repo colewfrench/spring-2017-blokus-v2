@@ -15,8 +15,10 @@ import edu.up.cs301.blokus.actions.SelectValidBlokOnBoardAction;
 import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
+import edu.up.cs301.game.actionMsg.MyNameIsAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
 import edu.up.cs301.game.infoMsg.GameOverInfo;
+import edu.up.cs301.game.infoMsg.StartGameInfo;
 
 /**
  * @author Cole French
@@ -78,6 +80,11 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                     game.sendAction(curAction);
                 }
             }
+        }
+
+        if (info instanceof StartGameInfo)
+        {
+            game.sendAction(new MyNameIsAction(this, this.name, this.playerNum));
         }
     }
 
