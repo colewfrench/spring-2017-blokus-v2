@@ -1,5 +1,7 @@
 package edu.up.cs301.blokus;
 
+import android.bluetooth.BluetoothA2dp;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -100,6 +102,8 @@ public class BlokusGameState extends GameState implements Serializable
                 playerPieces[i][j] = j;
             }
         }
+
+        setupEndgameState();
     }
 
     public BlokusGameState(BlokusGameState orig)
@@ -113,6 +117,321 @@ public class BlokusGameState extends GameState implements Serializable
         this.selectedPiece = copySelectedPiece(orig.getSelectedPiece());
         this.selectedBoardBlok = copySelectedBoardBlok(orig.getSelectedBoardBlok());
         this.selectedPieceBlokId = orig.getSelectedPieceBlokId();
+    }
+
+    private void setupEndgameState()
+    {
+        //setupGreen();
+        setupOrange();
+        setupPurple();
+
+        this.playerTurn = 0;
+        //Blue
+        this.playerTurn = 3;
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_W);
+        selectedBoardBlok = boardState[20][1];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I5);
+        selectedBoardBlok = boardState[17][1];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V3);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[20][3];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[17][4];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Y);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[12][2];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I1);
+        selectedBoardBlok = boardState[16][6];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L5);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[18][5];
+        selectedPieceBlokId = 4;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I3);
+        selectedBoardBlok = boardState[20][9];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_F);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[17][9];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T4);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[15][7];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I4);
+        selectedPiece.flip();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[14][6];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I2);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[10][7];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+    }
+
+    private void setupGreen()
+    {
+        // green player
+        this.playerTurn = 0;
+        selectedPiece = getPieceFromID(20);
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[1][1];
+        selectedPieceBlokId = 4;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(12);
+        selectedBoardBlok = boardState[3][4];
+        selectedPieceBlokId = 4;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(14);
+        selectedBoardBlok = boardState[5][6];
+        selectedPieceBlokId = 3;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(11);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[8][4];
+        selectedPieceBlokId = 4;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(6);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[9][5];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(19);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[13][4];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(18);
+        selectedBoardBlok = boardState[8][6];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(17);
+        selectedBoardBlok = boardState[9][8];
+        selectedPieceBlokId = 1;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(9);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[11][9];
+        selectedPieceBlokId = 4;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(16);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[13][11];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(10);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[12][16];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(7);
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[11][18];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(13);
+        selectedBoardBlok = boardState[9][18];
+        selectedPieceBlokId = 3;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(15);
+        selectedPiece.flip();
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[6][17];
+        selectedPieceBlokId = 1;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(8);
+        selectedBoardBlok = boardState[4][15];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+    }
+
+    private void setupOrange()
+    {
+        // orange
+        this.playerTurn = 1;
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I2);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[1][20];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_O4);
+        selectedBoardBlok = boardState[2][18];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L5);
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[3][19];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L4);
+        selectedBoardBlok = boardState[5][20];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T4);
+        selectedPiece.rotate();
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[7][17];
+        selectedPieceBlokId = 1;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Z4);
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[10][18];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T);
+        selectedBoardBlok = boardState[11][17];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_F);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[9][15];
+        selectedPieceBlokId = 1;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Z5);
+        selectedBoardBlok = boardState[7][13];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I4);
+        selectedBoardBlok = boardState[3][15];
+        selectedPieceBlokId = 3;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I1);
+        selectedBoardBlok = boardState[5][12];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_U);
+        selectedBoardBlok = boardState[4][11];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I3);
+        selectedBoardBlok = boardState[2][11];
+        selectedPieceBlokId = 2;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V5);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[1][8];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V3);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[3][8];
+        selectedPieceBlokId = 2;
+        confirmPiecePlacement();
+    }
+
+    private void setupPurple()
+    {
+        // purple
+        this.playerTurn = 2;
+
+        placePiece(PieceTemplate.PIECE_Z5, 20, 20, 4, 1, 0);
+        placePiece(PieceTemplate.PIECE_P, 19, 17, 0, 1, 0);
+        placePiece(PieceTemplate.PIECE_W, 18, 14, 0, 3, 0);
+
+        placePiece(PieceTemplate.PIECE_I4, 19, 12, 3, 0, 0);
+        placePiece(PieceTemplate.PIECE_L5, 20, 8, 4, 0, 0);
+        placePiece(PieceTemplate.PIECE_Z4, 17, 17, 3, 0, 1);
+
+        placePiece(PieceTemplate.PIECE_V5, 16, 18, 0, 2, 0);
+        placePiece(PieceTemplate.PIECE_I5, 17, 20, 0, 0 ,0);
+        placePiece(PieceTemplate.PIECE_U, 15, 11, 4, 1, 0);
+
+        placePiece(PieceTemplate.PIECE_F, 13, 10, 4, 3, 1);
+        placePiece(PieceTemplate.PIECE_T4, 11, 13, 3, 2, 0);
+        placePiece(PieceTemplate.PIECE_X, 10, 12, 0, 0, 0);
+
+        placePiece(PieceTemplate.PIECE_I2, 7, 11, 1, 0, 0);
+        placePiece(PieceTemplate.PIECE_I3, 6, 9, 2, 1, 0);
+        placePiece(PieceTemplate.PIECE_I1, 3, 10, 0, 0, 0);
+    }
+
+    private void placePiece(int pt, int row, int col, int pbId, int rotate, int flip)
+    {
+        selectedPiece = getPieceFromID(pt);
+        for (int i = 0; i < flip; i++)
+        {
+            selectedPiece.flip();
+        }
+        for (int i = 0; i < rotate; i++)
+        {
+            selectedPiece.rotate();
+        }
+        selectedBoardBlok = boardState[row][col];
+        selectedPieceBlokId = pbId;
+        confirmPiecePlacement();
     }
 
     /**
