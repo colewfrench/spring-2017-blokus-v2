@@ -111,7 +111,7 @@ BlokusLocalGame extends LocalGame {
     @Override
     protected String checkIfGameOver() {
         BlokusGameState copyState = new BlokusGameState(gameState);
-        String scoreMessage = "===========\nGAME OVER\n===========\n\n";
+        String scoreMessage = "============\n GAME OVER\n============\n\n";
 
         for(int i=0; i<4; i++)
         {
