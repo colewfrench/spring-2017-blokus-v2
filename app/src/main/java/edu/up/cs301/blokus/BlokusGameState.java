@@ -866,6 +866,11 @@ public class BlokusGameState extends GameState implements Serializable
         return playerTurn;
     }
 
+    public void setPlayerTurn(int newPlayerId)
+    {
+        this.playerTurn = newPlayerId;
+    }
+
     public Blok[][] getBoardState()
     {
         return boardState;
@@ -1149,7 +1154,7 @@ public class BlokusGameState extends GameState implements Serializable
         ArrayList<Blok> validCorners = getValidCorners(playerID);
 
         //Iterate over avaliable corners
-        if (validCorners != null || !validCorners.isEmpty())
+        if (validCorners != null && !validCorners.isEmpty())
         {
             for (int i = 0; i < validCorners.size(); i++) // for each valid corner blok on the board
             {
