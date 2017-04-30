@@ -1,5 +1,7 @@
 package edu.up.cs301.blokus;
 
+import android.bluetooth.BluetoothA2dp;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -124,6 +126,85 @@ public class BlokusGameState extends GameState implements Serializable
         setupPurple();
 
         this.playerTurn = 0;
+        //Blue
+        this.playerTurn = 3;
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_W);
+        selectedBoardBlok = boardState[20][1];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I5);
+        selectedBoardBlok = boardState[17][1];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V3);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[20][3];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[17][4];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Y);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[12][2];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I1);
+        selectedBoardBlok = boardState[16][6];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L5);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[18][5];
+        selectedPieceBlokId = 4;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I3);
+        selectedBoardBlok = boardState[20][9];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_F);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[17][9];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T4);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[15][7];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I4);
+        selectedPiece.flip();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[14][6];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I2);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[10][7];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
     }
 
     private void setupGreen()
