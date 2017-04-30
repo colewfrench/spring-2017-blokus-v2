@@ -121,11 +121,10 @@ public class BlokusGameState extends GameState implements Serializable
 
     private void setupEndgameState()
     {
-        //setupGreen();
+        setupGreen();
         setupOrange();
         setupPurple();
 
-        this.playerTurn = 0;
         //Blue
         this.playerTurn = 3;
         selectedPiece = getPieceFromID(PieceTemplate.PIECE_W);
@@ -205,6 +204,7 @@ public class BlokusGameState extends GameState implements Serializable
         selectedPieceBlokId = 0;
         confirmPiecePlacement();
 
+        this.playerTurn = 0;
     }
 
     private void setupGreen()
@@ -489,7 +489,7 @@ public class BlokusGameState extends GameState implements Serializable
                 Blok b = boardState[i][j];
 
                 if (b.getColor() == playerId)
-                    checkSingleBlokCorners(b, validCorners);
+                    checkSingleBlokCorners(playerId, b, validCorners);
             }
         }
 
@@ -505,7 +505,7 @@ public class BlokusGameState extends GameState implements Serializable
      *
      * @param blok the blok on the board whose corners are to be checked
      */
-    private void checkSingleBlokCorners(Blok blok, ArrayList<Blok> validCorners)
+    private void checkSingleBlokCorners(int playerID, Blok blok, ArrayList<Blok> validCorners)
     {
         int row = blok.getRow();
         int col = blok.getColumn();
@@ -538,7 +538,7 @@ public class BlokusGameState extends GameState implements Serializable
             if (!validCorners.contains(checkBlok))
             {
                 if (checkBlok.getColor() == EMPTY_BLOK &&
-                        checkAdjacentBloksOnBoard(checkBlok, boardState))
+                        checkAdjacentBloksOnBoard(playerID, checkBlok, boardState))
                 {
                     validCorners.add(checkBlok);
                 }
@@ -621,7 +621,7 @@ public class BlokusGameState extends GameState implements Serializable
                     will be adjacent to already placed bloks of the same
                     color, in which case the placement is invalid
                 */
-                if (!checkAdjacentBloksOnBoard(pb, board))
+                if (!checkAdjacentBloksOnBoard(playerTurn, pb, board))
                     return null;
             }
 
@@ -687,7 +687,7 @@ public class BlokusGameState extends GameState implements Serializable
      * @param board the board which the given blok is tested on
      * @return false if same color is adjacent to the blok, otherwise true
      */
-    private boolean checkAdjacentBloksOnBoard(Blok blok, Blok[][] board)
+    private boolean checkAdjacentBloksOnBoard(int playerID, Blok blok, Blok[][] board)
     {
         int row = blok.getRow();
         int col = blok.getColumn();
@@ -717,7 +717,7 @@ public class BlokusGameState extends GameState implements Serializable
                     break;
             }
 
-            if (board[row + rMod][col + cMod].getColor() == playerTurn)
+            if (board[row + rMod][col + cMod].getColor() == playerID)
                 return false;
         }
 

@@ -1,5 +1,7 @@
 package edu.up.cs301.blokus;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -58,10 +60,6 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
 
     @Override
     protected void receiveInfo(GameInfo info) {
-        if (info instanceof GameOverInfo)
-        {
-            sleep(100);
-        }
         if (info instanceof BlokusGameState)
         {
             this.gameState = (BlokusGameState)info;

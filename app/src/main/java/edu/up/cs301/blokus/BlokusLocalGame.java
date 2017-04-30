@@ -56,36 +56,36 @@ BlokusLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
-            if (action instanceof FlipSelectedPieceAction) {
-                gameState.flipSelectedPiece();
+        if (action instanceof FlipSelectedPieceAction) {
+            gameState.flipSelectedPiece();
+        }
+        if (action instanceof RotateSelectedPieceAction) {
+            gameState.rotateSelectedPiece();
+        }
+        if (action instanceof SelectBlokOnSelectedPieceAction) {
+            gameState.selectBlokOnSelectedPiece((SelectBlokOnSelectedPieceAction) action);
+        }
+        if (action instanceof ConfirmPiecePlacementAction) {
+            if (gameState.confirmPiecePlacement()) {
+                // piece was successfully placed; go to next player turn
+                gameState.changeToNextPlayer();
+                gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
             }
-            if (action instanceof RotateSelectedPieceAction) {
-                gameState.rotateSelectedPiece();
-            }
-            if (action instanceof SelectBlokOnSelectedPieceAction) {
-                gameState.selectBlokOnSelectedPiece((SelectBlokOnSelectedPieceAction) action);
-            }
-            if (action instanceof ConfirmPiecePlacementAction) {
-                if (gameState.confirmPiecePlacement()) {
-                    // piece was successfully placed; go to next player turn
-                    gameState.changeToNextPlayer();
-                    gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
-                }
-                // else, current piece cannot be placed, continue current turn
-            }
-            if (action instanceof SelectPieceTemplateAction) {
-                gameState.selectPieceTemplate((SelectPieceTemplateAction) action);
-            }
-            if (action instanceof SelectValidBlokOnBoardAction) {
-                gameState.selectValidBlokOnBoard((SelectValidBlokOnBoardAction) action);
-            }
+            // else, current piece cannot be placed, continue current turn
+        }
+        if (action instanceof SelectPieceTemplateAction) {
+            gameState.selectPieceTemplate((SelectPieceTemplateAction) action);
+        }
+        if (action instanceof SelectValidBlokOnBoardAction) {
+            gameState.selectValidBlokOnBoard((SelectValidBlokOnBoardAction) action);
+        }
 
-            if (action instanceof DoNothingAction) {
-                if (((DoNothingAction) action).passMyTurn()) {
-                    gameState.changeToNextPlayer();
-                    gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
-                }
+        if (action instanceof DoNothingAction) {
+            if (((DoNothingAction) action).passMyTurn()) {
+                gameState.changeToNextPlayer();
+                gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
             }
+        }
 
         return true;
     }//makeMove
@@ -110,6 +110,9 @@ BlokusLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
+        BlokusGameState copyState = new BlokusGameState(gameState);
+        String scoreMessage = "===========\nGAME OVER\n===========\n\n";
+
         for(int i=0; i<4; i++)
         {
             if (gameState.playerCanMove(i))
@@ -118,12 +121,11 @@ BlokusLocalGame extends LocalGame {
             }
         }
 
-        Blok[][] boardState = gameState.getBoardState();
+        Blok[][] boardState = copyState.getBoardState();
         int[] pointsPerPlayer = new int[4];
-        int[][] playerPieces = gameState.getPlayerPieces();
+        int[][] playerPieces = copyState.getPlayerPieces();
         int maxPoints = 0;
         int winner = 0;
-        String scoreMessage = "";
 
         // give players bonus points if they placed all their pieces
         int bonusPoints;
@@ -176,22 +178,28 @@ BlokusLocalGame extends LocalGame {
             }
         }
 
+        for (int i = 0; i < 4; i++)
+        {
+            scoreMessage = scoreMessage + "Player " + (i+1) + " Points: "
+                    + pointsPerPlayer[i] + "\n";
+        }
+
         switch(winner)
         {
             case 0:
-                scoreMessage = "Player 1 Wins! Your OOki Points: "+ pointsPerPlayer[0];
+                scoreMessage += "\nPlayer 1 Wins!";
                 break;
 
             case 1:
-                scoreMessage = "Player 2 Wins! Your OOki Points: "+ pointsPerPlayer[1];
+                scoreMessage += "\nPlayer 2 Wins!";
                 break;
 
             case 2:
-                scoreMessage = "Player 3 Wins! Your OOki Points: "+ pointsPerPlayer[2];
+                scoreMessage += "\nPlayer 3 Wins!";
                 break;
 
             case 3:
-                scoreMessage = "Player 4 Wins! Your OOki Points: "+ pointsPerPlayer[3];
+                scoreMessage += "\nPlayer 4 Wins!";
                 break;
         }
 
