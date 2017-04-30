@@ -28,7 +28,8 @@ import edu.up.cs301.game.infoMsg.GameState;
  * @author Andrew M. Nuxoll
  * @version July 2013
  */
-public class BlokusLocalGame extends LocalGame {
+public class
+BlokusLocalGame extends LocalGame {
 
     // the game's state
     private BlokusGameState gameState;
