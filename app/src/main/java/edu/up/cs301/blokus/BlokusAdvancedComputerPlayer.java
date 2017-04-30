@@ -45,6 +45,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
     public int[] playablePieces;
     private ArrayList<Blok> playableBoardBloks;
     public int sizeTracker;
+    public boolean firstActionOfTurn;
 
     static Random r;
     /**
@@ -62,6 +63,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         this.pieceBlokTracker = 0;
         this.rotateTracker = 0;
         this.sizeTracker = 20;
+        this.firstActionOfTurn = false;
 
         this.playablePieces = new int[21];
     }
@@ -72,16 +74,19 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         {
             this.gameState = (BlokusGameState)info;
 
-            // if the current player has no available moves, skip his turn
-            if (!gameState.playerCanMove(this.playerNum))
+            if (gameState.getPlayerTurn() == this.playerNum)
             {
-                game.sendAction(new DoNothingAction(this, true));
-            }
-            else if (gameState.getPlayerTurn() == this.playerNum)
-            {
-                sleep(50);
-                decideAction();
-                game.sendAction(curAction);
+                // if the current player has no available moves, skip his turn
+                if (firstActionOfTurn && !gameState.playerCanMove(this.playerNum))
+                {
+                    game.sendAction(new DoNothingAction(this, true));
+                }
+                else
+                {
+                    sleep(50);
+                    decideActionByState();
+                    game.sendAction(curAction);
+                }
             }
         }
     }
@@ -100,6 +105,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 AI.rotateTracker = 0;
                 AI.pieceBlokTracker = 0;
                 AI.sizeTracker = 20;
+                AI.firstActionOfTurn = false;
 
                 return SelectPiece;
             }
@@ -267,6 +273,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 }
                 else
                 {
+                    AI.firstActionOfTurn = true;
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
 
                     return SetupStartOfTurn;
@@ -325,5 +332,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         }
 
         this.playableBoardBloks.remove(i);
+    }
+
+    private void decideActionByState()
+    {
+        curState = curState.checkState(this, gameState);
     }
 }
