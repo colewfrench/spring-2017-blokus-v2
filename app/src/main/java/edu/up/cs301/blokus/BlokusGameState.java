@@ -815,8 +815,10 @@ public class BlokusGameState extends GameState implements Serializable
 
         PieceTemplate tempPiece;
 
-        for (int i = 0; i < 21; i++) {
-            if (currentPieces[i] != -1) {
+        for (int i = 0; i < 21; i++)
+        {
+            if (currentPieces[i] != -1)
+            {
                 tempPiece = getPieceFromID(currentPieces[i]);
                 playablePieces.add(tempPiece);
             }

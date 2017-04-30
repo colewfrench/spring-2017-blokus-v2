@@ -26,6 +26,7 @@ import edu.up.cs301.game.GameHumanPlayer;
 import edu.up.cs301.game.GameMainActivity;
 import edu.up.cs301.game.R;
 import edu.up.cs301.game.infoMsg.GameInfo;
+import edu.up.cs301.game.infoMsg.GameOverInfo;
 import edu.up.cs301.game.infoMsg.NotYourTurnInfo;
 
 
@@ -82,6 +83,13 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
     @Override
     public void receiveInfo(GameInfo info) {
+        if (info instanceof GameOverInfo)
+        {
+            disablePlayerInput();
+            rotateButton.setBackgroundColor(Color.RED);
+            flipButton.setBackgroundColor(Color.RED);
+            confirmButton.setBackgroundColor(Color.RED);
+        }
         if (info instanceof BlokusGameState)
         {
             this.newState = (BlokusGameState)info;

@@ -14,6 +14,7 @@ import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
+import edu.up.cs301.game.infoMsg.GameOverInfo;
 
 /**
  * @author Cole French
@@ -57,6 +58,10 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
 
     @Override
     protected void receiveInfo(GameInfo info) {
+        if (info instanceof GameOverInfo)
+        {
+            sleep(100);
+        }
         if (info instanceof BlokusGameState)
         {
             this.gameState = (BlokusGameState)info;
