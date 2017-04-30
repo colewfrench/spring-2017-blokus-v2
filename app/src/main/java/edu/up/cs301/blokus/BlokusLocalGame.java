@@ -113,7 +113,6 @@ BlokusLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
-        BlokusGameState copyState = new BlokusGameState(gameState);
         String scoreMessage = "============\n GAME OVER\n============\n\n";
 
         for(int i=0; i<4; i++)
@@ -124,9 +123,9 @@ BlokusLocalGame extends LocalGame {
             }
         }
 
-        Blok[][] boardState = copyState.getBoardState();
+        Blok[][] boardState = gameState.getBoardState();
         int[] pointsPerPlayer = new int[4];
-        int[][] playerPieces = copyState.getPlayerPieces();
+        int[][] playerPieces = gameState.getPlayerPieces();
         int maxPoints = 0;
         int winner = 0;
 
@@ -170,7 +169,6 @@ BlokusLocalGame extends LocalGame {
                 }
             }
         }
-
 
         for(int i = 0; i < 4; i++)
         {

@@ -1,7 +1,5 @@
 package edu.up.cs301.blokus;
 
-import android.bluetooth.BluetoothA2dp;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -103,7 +101,7 @@ public class BlokusGameState extends GameState implements Serializable
             }
         }
         // TODO remove, used for bugtesting
-        //setupEndgameState();
+        setupEndgameState();
     }
 
     public BlokusGameState(BlokusGameState orig)
@@ -1151,7 +1149,7 @@ public class BlokusGameState extends GameState implements Serializable
         ArrayList<Blok> validCorners = getValidCorners(playerID);
 
         //Iterate over avaliable corners
-        if (validCorners != null)
+        if (validCorners != null || !validCorners.isEmpty())
         {
             for (int i = 0; i < validCorners.size(); i++) // for each valid corner blok on the board
             {

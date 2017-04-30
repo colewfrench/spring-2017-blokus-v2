@@ -2,12 +2,10 @@ package edu.up.cs301.blokus;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,11 +23,7 @@ import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameHumanPlayer;
 import edu.up.cs301.game.GameMainActivity;
 import edu.up.cs301.game.R;
-import edu.up.cs301.game.actionMsg.MyNameIsAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
-import edu.up.cs301.game.infoMsg.GameOverInfo;
-import edu.up.cs301.game.infoMsg.NotYourTurnInfo;
-import edu.up.cs301.game.infoMsg.StartGameInfo;
 
 
 /**
@@ -119,11 +113,6 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                 flipButton.setBackgroundColor(Color.RED);
                 confirmButton.setBackgroundColor(Color.RED);
             }
-        }
-
-        if (info instanceof StartGameInfo)
-        {
-            game.sendAction(new MyNameIsAction(this, this.name, this.playerNum));
         }
     }
 

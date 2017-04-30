@@ -44,7 +44,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
     public int pieceBlokTracker;
     public int[] playablePieces;
     private ArrayList<Blok> playableBoardBloks;
-    public int sizeTracker;
     public boolean firstActionOfTurn;
 
     static Random r;
@@ -62,8 +61,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
 
         this.pieceBlokTracker = 0;
         this.rotateTracker = 0;
-        this.sizeTracker = 20;
-        this.firstActionOfTurn = false;
+        this.firstActionOfTurn = true;
 
         this.playablePieces = new int[21];
     }
@@ -104,7 +102,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 AI.resetPlayablePieces(state.getPlayerPieces()[AI.playerNum]);
                 AI.rotateTracker = 0;
                 AI.pieceBlokTracker = 0;
-                AI.sizeTracker = 20;
                 AI.firstActionOfTurn = false;
 
                 return SelectPiece;
@@ -113,7 +110,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         /*
         in select piece the advanced AI cycles through avaliable pieces, selecting the largest one,
         it returns to this step if the piece it originally chooses doesn't fit anywhere
-        if no pieces can be placed or no the ai has no pieces remaing it's turn is over
+        if no pieces can be placed or no the ai has no pieces remaining it's turn is over
          */
         SelectPiece {
             @Override
@@ -121,26 +118,21 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
             {
                 AI.setPlayableCorners(state.getValidCorners(AI.playerNum));
 
-                int[] AIPieces = state.getPlayerPieces()[state.getPlayerTurn()];
-                int pieceID;
-                //find piece to play
-                if(AI.sizeTracker !=-1) {
-                    do {
-                        pieceID = AIPieces[AI.sizeTracker];
+                int[] AIPieces = AI.getPlayablePieces();
+                int pieceID = -1;
 
-                        if (pieceID == -1) {
-                            AI.sizeTracker = AI.sizeTracker - 1;
-                        }
-                    } while (pieceID == -1 && AI.sizeTracker >= 0);
+                for (int i = 20; i >= 0; i--)
+                {
+                    pieceID = AIPieces[i];
 
-                    SelectPieceTemplateAction spta =
-                            new SelectPieceTemplateAction(AI, pieceID);
-
-                    AI.setAction(spta);
+                    if (pieceID != -1)
+                        break;
                 }
-                else{
-                    AI.setAction(new DoNothingAction(AI, true));
-                }
+
+                SelectPieceTemplateAction spta =
+                        new SelectPieceTemplateAction(AI, pieceID);
+                AI.setAction(spta);
+
                 return SelectBoardBlok;
             }
         },
@@ -158,7 +150,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                     AI.rotateTracker = 0;
                     AI.pieceBlokTracker = 0;
                     AI.setPieceUnplayable(state.getSelectedPiece().getPieceId());
-                    AI.sizeTracker = AI.sizeTracker-1;
                     return SelectPiece;
                 }
 
@@ -245,8 +236,8 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
 
                     return SelectPieceBlok;
                 }
-
-                return ConfirmPlacement;
+                else
+                    return ConfirmPlacement;
             }
         },
         /*
@@ -273,16 +264,15 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 }
                 else
                 {
-                    AI.firstActionOfTurn = true;
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
-
+                    AI.firstActionOfTurn = true;
                     return SetupStartOfTurn;
                 }
             }
         }
     }
 
-    private void decideAction()
+    private void decideActionByState()
     {
         curState = curState.checkState(this, gameState);
     }
@@ -290,6 +280,11 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
     public void setAction(GameAction action)
     {
         this.curAction = action;
+    }
+
+    public int[] getPlayablePieces()
+    {
+        return this.playablePieces;
     }
 
     public void setPieceUnplayable(int pieceID)
@@ -332,10 +327,5 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         }
 
         this.playableBoardBloks.remove(i);
-    }
-
-    private void decideActionByState()
-    {
-        curState = curState.checkState(this, gameState);
     }
 }

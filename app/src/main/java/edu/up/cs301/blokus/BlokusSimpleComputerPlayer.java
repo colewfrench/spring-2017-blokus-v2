@@ -78,13 +78,19 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 }
             }
         }
-
-        if (info instanceof StartGameInfo)
-        {
-            game.sendAction(new MyNameIsAction(this, this.name, this.playerNum));
-        }
     }
 
+    /**
+     * External Citation
+     * Date: 4/30/2017
+     * Problem: wanted better way to organize AI operations
+     *
+     * Resource:
+     *      https://github.com/Team-Pronto-3070/Competition2015/blob/master/
+     *      src/org/usfirst/frc/team3070/robot/ProntoLoader.java
+     *
+     * Solution: I used the code structure from my old robotics team to organize the states
+     */
     enum AIStates implements AIState {
         SetupStartOfTurn {
             @Override
