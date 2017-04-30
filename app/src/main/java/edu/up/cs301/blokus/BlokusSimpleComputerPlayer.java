@@ -28,6 +28,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
     private BlokusGameState gameState;
     private GameAction curAction;
     private AIState curState;
+    private boolean firstActionOfTurn;
     public int rotateTracker;
     public int pieceBlokTracker;
     public int[] playablePieces;
@@ -43,6 +44,8 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         super(name);
         curState = AIStates.SetupStartOfTurn;
         r = new Random();
+
+        this.firstActionOfTurn = true;
 
         this.playableBoardBloks = new ArrayList<>();
 
@@ -61,7 +64,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
             if (gameState.getPlayerTurn() == this.playerNum)
             {
                 // if the current player has no available moves, skip his turn
-                if (!gameState.playerCanMove(this.playerNum))
+                if (firstActionOfTurn && !gameState.playerCanMove(this.playerNum))
                 {
                     game.sendAction(new DoNothingAction(this, true));
                 }
@@ -84,6 +87,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 AI.resetPlayablePieces(state.getPlayerPieces()[AI.playerNum]);
                 AI.rotateTracker = 0;
                 AI.pieceBlokTracker = 0;
+                AI.firstActionOfTurn = false;
 
                 return SelectPiece;
             }
@@ -226,7 +230,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 else
                 {
                     AI.setAction(new ConfirmPiecePlacementAction(AI));
-
+                    AI.firstActionOfTurn = true;
                     return SetupStartOfTurn;
                 }
             }
