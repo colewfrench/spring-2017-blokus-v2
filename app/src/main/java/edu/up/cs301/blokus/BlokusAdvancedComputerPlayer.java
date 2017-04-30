@@ -86,7 +86,11 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         }
     }
 
+
     enum AIStates implements AIState {
+        /*
+        on start of turn all ints are set to their initial values
+         */
         SetupStartOfTurn {
             @Override
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
@@ -100,6 +104,11 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 return SelectPiece;
             }
         },
+        /*
+        in select piece the advanced AI cycles through avaliable pieces, selecting the largest one,
+        it returns to this step if the piece it originally chooses doesn't fit anywhere
+        if no pieces can be placed or no the ai has no pieces remaing it's turn is over
+         */
         SelectPiece {
             @Override
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
@@ -129,6 +138,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 return SelectBoardBlok;
             }
         },
+        /*
+        Selects a blok on the board from the avaliable corners, if the selected piece doesn't
+        fit at any of the spaces on the board it selects a new piece
+         */
         SelectBoardBlok {
             @Override
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
@@ -157,6 +170,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 return SelectPieceBlok;
             }
         },
+        /*
+        runs through all the blok on the piece at the selected corners and sends information
+        to the confirm action to be checked
+         */
         SelectPieceBlok {
             @Override
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
@@ -187,6 +204,9 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 return ConfirmPlacement;
             }
         },
+        /*
+        rotates and flips the piece so all orientations are tried
+         */
         Rotate {
             @Override
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
@@ -223,6 +243,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 return ConfirmPlacement;
             }
         },
+        /*
+        confirm placement checks if the moves are valid, if a move is found to be valid
+        that move is played and the ai returns to the turn setup step
+         */
         ConfirmPlacement {
             @Override
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
@@ -281,6 +305,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         this.playableBoardBloks = validCorners;
     }
 
+    /*
+    remove playable is used to remove bloks that have been tried so that we can now when a piece
+    has been tried at every valid space on the board
+     */
     public void removePlayableBlok(Blok unplayableBlok)
     {
         int row = unplayableBlok.getRow();
