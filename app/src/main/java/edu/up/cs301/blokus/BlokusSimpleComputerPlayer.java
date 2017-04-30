@@ -1,7 +1,5 @@
 package edu.up.cs301.blokus;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,7 +15,6 @@ import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.actionMsg.MyNameIsAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
-import edu.up.cs301.game.infoMsg.GameOverInfo;
 import edu.up.cs301.game.infoMsg.StartGameInfo;
 
 /**
