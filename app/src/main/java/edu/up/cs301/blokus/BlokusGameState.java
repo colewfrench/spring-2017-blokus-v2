@@ -102,8 +102,8 @@ public class BlokusGameState extends GameState implements Serializable
                 playerPieces[i][j] = j;
             }
         }
-
-        setupEndgameState();
+        // TODO remove, used for bugtesting
+        //setupEndgameState();
     }
 
     public BlokusGameState(BlokusGameState orig)
