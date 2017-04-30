@@ -76,7 +76,7 @@ public class BlokusMainActivity extends GameMainActivity {
         // - IP code: (empty string)
         // - default player type: human player
         defaultConfig.setRemoteData("Remote Player", "", 0);
-        //defaultConfig.setUserModifiable(false);
+        defaultConfig.setUserModifiable(false);
 
         // return the configuration
         return defaultConfig;
