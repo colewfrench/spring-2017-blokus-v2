@@ -120,86 +120,9 @@ public class BlokusGameState extends GameState implements Serializable
     private void setupEndgameState()
     {
         //setupGreen();
+        setupOrange();
+        setupPurple();
 
-        // orange
-        this.playerTurn = 1;
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I2);
-        selectedPiece.rotate();
-        selectedBoardBlok = boardState[1][20];
-        selectedPieceBlokId = 0;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_O4);
-        selectedBoardBlok = boardState[2][18];
-        selectedPieceBlokId = 0;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L5);
-        selectedPiece.flip();
-        selectedBoardBlok = boardState[3][19];
-        selectedPieceBlokId = 0;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L4);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T4);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Z4);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-/*
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_F);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Z5);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I4);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I1);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_U);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I3);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V5);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-
-        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V3);
-        selectedBoardBlok = boardState[][];
-        selectedPieceBlokId = ;
-        confirmPiecePlacement();
-*/
         this.playerTurn = 0;
     }
 
@@ -296,6 +219,137 @@ public class BlokusGameState extends GameState implements Serializable
         selectedPiece = getPieceFromID(8);
         selectedBoardBlok = boardState[4][15];
         selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+    }
+
+    private void setupOrange()
+    {
+        // orange
+        this.playerTurn = 1;
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I2);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[1][20];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_O4);
+        selectedBoardBlok = boardState[2][18];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L5);
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[3][19];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_L4);
+        selectedBoardBlok = boardState[5][20];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T4);
+        selectedPiece.rotate();
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[7][17];
+        selectedPieceBlokId = 1;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Z4);
+        selectedPiece.flip();
+        selectedBoardBlok = boardState[10][18];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_T);
+        selectedBoardBlok = boardState[11][17];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_F);
+        selectedPiece.rotate();
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[9][15];
+        selectedPieceBlokId = 1;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_Z5);
+        selectedBoardBlok = boardState[7][13];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I4);
+        selectedBoardBlok = boardState[3][15];
+        selectedPieceBlokId = 3;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I1);
+        selectedBoardBlok = boardState[5][12];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_U);
+        selectedBoardBlok = boardState[4][11];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_I3);
+        selectedBoardBlok = boardState[2][11];
+        selectedPieceBlokId = 2;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V5);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[1][8];
+        selectedPieceBlokId = 0;
+        confirmPiecePlacement();
+
+        selectedPiece = getPieceFromID(PieceTemplate.PIECE_V3);
+        selectedPiece.rotate();
+        selectedBoardBlok = boardState[3][8];
+        selectedPieceBlokId = 2;
+        confirmPiecePlacement();
+    }
+
+    private void setupPurple()
+    {
+        // purple
+        this.playerTurn = 2;
+
+        placePiece(PieceTemplate.PIECE_Z5, 20, 20, 4, 1, 0);
+        placePiece(PieceTemplate.PIECE_P, 19, 17, 0, 1, 0);
+        placePiece(PieceTemplate.PIECE_W, 18, 14, 0, 3, 0);
+
+        placePiece(PieceTemplate.PIECE_I4, 19, 12, 3, 0, 0);
+        placePiece(PieceTemplate.PIECE_L5, 20, 8, 4, 0, 0);
+        placePiece(PieceTemplate.PIECE_Z4, 17, 17, 3, 0, 1);
+
+        placePiece(PieceTemplate.PIECE_V5, 16, 18, 0, 2, 0);
+        placePiece(PieceTemplate.PIECE_I5, 17, 20, 0, 0 ,0);
+        placePiece(PieceTemplate.PIECE_U, 15, 11, 4, 1, 0);
+
+        placePiece(PieceTemplate.PIECE_F, 13, 10, 4, 3, 1);
+        placePiece(PieceTemplate.PIECE_T4, 11, 13, 3, 2, 0);
+        placePiece(PieceTemplate.PIECE_X, 10, 12, 0, 0, 0);
+
+        placePiece(PieceTemplate.PIECE_I2, 7, 11, 1, 0, 0);
+        placePiece(PieceTemplate.PIECE_I3, 6, 9, 2, 1, 0);
+        placePiece(PieceTemplate.PIECE_I1, 3, 10, 0, 0, 0);
+    }
+
+    private void placePiece(int pt, int row, int col, int pbId, int rotate, int flip)
+    {
+        selectedPiece = getPieceFromID(pt);
+        for (int i = 0; i < flip; i++)
+        {
+            selectedPiece.flip();
+        }
+        for (int i = 0; i < rotate; i++)
+        {
+            selectedPiece.rotate();
+        }
+        selectedBoardBlok = boardState[row][col];
+        selectedPieceBlokId = pbId;
         confirmPiecePlacement();
     }
 
