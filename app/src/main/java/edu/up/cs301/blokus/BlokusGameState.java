@@ -101,7 +101,7 @@ public class BlokusGameState extends GameState implements Serializable
             }
         }
         // TODO remove, used for bugtesting
-        setupEndgameState();
+        // setupEndgameState();
     }
 
     public BlokusGameState(BlokusGameState orig)

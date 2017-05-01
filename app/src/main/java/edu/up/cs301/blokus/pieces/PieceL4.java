@@ -6,7 +6,9 @@ import edu.up.cs301.blokus.BlokusGameState;
 import edu.up.cs301.blokus.PieceBlok;
 
 /**
- * Created by ajimine19 on 4/1/2017.
+ * Piece Definition
+ *
+ * @author Devin Ajimine
  */
 public class PieceL4 extends PieceTemplate
 {

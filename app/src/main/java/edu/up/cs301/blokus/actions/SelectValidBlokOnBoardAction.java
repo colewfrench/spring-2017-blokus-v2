@@ -8,7 +8,12 @@ import edu.up.cs301.game.GamePlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 
 /**
- * Created by lowa19 on 3/5/2017.
+ * Used to select a Blok on the board stored in the GameState.
+ *
+ * @author Adrian Low
+ * @author Cole French
+ * @author Devin Ajimine
+ * @author Evan Sterba
  */
 public class SelectValidBlokOnBoardAction extends GameAction implements Serializable{
 
@@ -18,10 +23,7 @@ public class SelectValidBlokOnBoardAction extends GameAction implements Serializ
 
     /**
      * constructor
-     * @author Adrian Low
-     * @author Cole French
-     * @author Devin Ajimine
-     * @author Evan Sterba
+     *
      * @param player the player who created the action
      * @param selectedBlok the blok that was selected within the valid
      *                    moves array

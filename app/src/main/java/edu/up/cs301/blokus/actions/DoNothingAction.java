@@ -6,8 +6,12 @@ import edu.up.cs301.game.GamePlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 
 /**
- * Created by sterba19 on 4/9/2017.
- * When the player has no moves avaliable the doNothingAction will skip to the next persons turn
+ *
+ * When the player has no moves avaliable the doNothingAction
+ * will skip to the next persons turn; also used so ComputerPlayers
+ * can request a new GameState without modifying anything
+ *
+ * @author Cole French
  */
 
 public class DoNothingAction extends GameAction implements Serializable {

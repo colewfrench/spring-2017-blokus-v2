@@ -14,7 +14,7 @@ import edu.up.cs301.blokus.PieceBlok;
  * NOTE: all PieceBlok adjacency ids are set based on definition
  * from PieceNames.png
  *
- *  @author Adrian Low
+ * @author Adrian Low
  * @author Cole French
  * @author Devin Ajimine
  * @author Evan Sterba
@@ -47,9 +47,9 @@ public abstract class PieceTemplate implements Serializable{
     public static final int PIECE_V5 = 19;
     public static final int PIECE_F = 20;
 
-    protected PieceBlok[] pieceShape;
-    protected int pieceId;
-    protected PieceBlok anchor;
+    protected PieceBlok[] pieceShape; // the Bloks that define the piece
+    protected int pieceId; // the piece's unique id number
+    protected PieceBlok anchor; // the Blok in the piece used to rotate and flip around
 
     public PieceTemplate(int pieceId)
     {
@@ -73,6 +73,9 @@ public abstract class PieceTemplate implements Serializable{
         return pieceShape;
     }
 
+    /**
+     * perform the matrix element swaps to flip the piece
+     */
     public void flip()
     {
         int[] curAdj;
@@ -88,6 +91,9 @@ public abstract class PieceTemplate implements Serializable{
         }
     }
 
+    /**
+     * perform the matrix element swaps to rotate the piece
+     */
     public void rotate()
     {
         int[] curAdj;
@@ -106,8 +112,23 @@ public abstract class PieceTemplate implements Serializable{
         }
     }
 
+    /**
+     * used to set which Bloks on the piece are adjacent with
+     * each other Blok on the piece; this is what defines
+     * the shape of each piece
+     * @param pieceBlokId the Blok having its adjacencies set
+     * @return the given Blok's newly set adjacency matrix
+     */
     protected abstract int[] getAdjArray(int pieceBlokId);
 
+    /**
+     * This method helps determine if the selected Blok on the piece
+     * can be used as a corner Blok to place against any corner
+     * on the board
+     *
+     * @param pieceBlokId indicates which Blok in the piece definition to check
+     * @return true if the Blok being checked has a corner on the piece
+     */
     protected abstract boolean isValidCorner(int pieceBlokId);
 
     public PieceBlok getAnchor()
