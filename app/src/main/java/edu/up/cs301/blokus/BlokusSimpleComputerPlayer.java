@@ -103,7 +103,10 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
             {
                 AI.setAction(new DoNothingAction(AI, false));
-                AI.resetPlayablePieces(state.getPlayerPieces()[AI.playerNum]);
+                int[] currentPieces = state.getPlayerPieces()[AI.playerNum];
+                AI.resetPlayablePieces(
+                        state.getReducedPlayablePieces(AI.playerNum,
+                                currentPieces, state.getValidCorners(AI.playerNum)));
                 AI.rotateTracker = 0;
                 AI.pieceBlokTracker = 0;
                 AI.firstActionOfTurn = false;
@@ -268,7 +271,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 int selectedPieceBlokId = state.getSelectedPieceBlokId();
                 Blok[][] board = state.getBoardState();
 
-                if (state.prepareValidMove(selectedBoardBlok, // if invalid move
+                if (state.prepareValidMove(AI.playerNum, selectedBoardBlok, // if invalid move
                         selectedPiece,
                         selectedPieceBlokId,
                         board) == null)

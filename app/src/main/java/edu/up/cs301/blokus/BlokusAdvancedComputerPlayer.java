@@ -42,6 +42,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
     public int[] playablePieces; //the piece IDs that the AI has not tried to place yet
     private ArrayList<Blok> playableBoardBloks; //the board spaces that the AI has not tried yet
     public boolean firstActionOfTurn; //used to reduce computations on AI's info received
+    private int lastPieceIndex = 20;
 
     static Random r; //used to get random board spaces
 
@@ -60,6 +61,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         this.pieceBlokTracker = 0;
         this.rotateTracker = 0;
         this.firstActionOfTurn = true;
+        this.lastPieceIndex = 20;
 
         this.playablePieces = new int[21];
     }
@@ -111,7 +113,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
             public AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state)
             {
                 AI.setAction(new DoNothingAction(AI, false));
-                AI.resetPlayablePieces(state.getPlayerPieces()[AI.playerNum]);
+                int[] currentPieces = state.getPlayerPieces()[AI.playerNum];
+                AI.resetPlayablePieces(
+                        state.getReducedPlayablePieces(AI.playerNum,
+                                currentPieces, state.getValidCorners(AI.playerNum)));
                 AI.rotateTracker = 0;
                 AI.pieceBlokTracker = 0;
                 AI.firstActionOfTurn = false;
@@ -138,7 +143,9 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                     pieceID = AIPieces[i];
 
                     if (pieceID != -1)
+                    {
                         break;
+                    }
                 }
 
                 SelectPieceTemplateAction spta =
@@ -265,7 +272,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
                 int selectedPieceBlokId = state.getSelectedPieceBlokId();
                 Blok[][] board = state.getBoardState();
 
-                if (state.prepareValidMove(selectedBoardBlok, // if invalid move
+                if (state.prepareValidMove(AI.playerNum, selectedBoardBlok, // if invalid move
                         selectedPiece,
                         selectedPieceBlokId,
                         board) == null)

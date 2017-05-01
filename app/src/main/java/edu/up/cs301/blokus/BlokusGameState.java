@@ -1,6 +1,7 @@
 package edu.up.cs301.blokus;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.up.cs301.blokus.actions.SelectBlokOnSelectedPieceAction;
@@ -587,7 +588,7 @@ public class BlokusGameState extends GameState implements Serializable
      * @param board the board to test the placement on
      * @return a list of bloks to color, or null if placement is invalid
      */
-    public ArrayList<PieceBlok> prepareValidMove(Blok selectedBoardBlok,
+    public ArrayList<PieceBlok> prepareValidMove(int playerNum, Blok selectedBoardBlok,
                               PieceTemplate selectedPiece,
                               int selectedPieceBlokId,
                               Blok[][] board)
@@ -629,7 +630,7 @@ public class BlokusGameState extends GameState implements Serializable
                     will be adjacent to already placed bloks of the same
                     color, in which case the placement is invalid
                 */
-                if (!checkAdjacentBloksOnBoard(playerTurn, pb, board))
+                if (!checkAdjacentBloksOnBoard(playerNum, pb, board))
                     return null;
             }
 
@@ -767,7 +768,7 @@ public class BlokusGameState extends GameState implements Serializable
             return false;
         }
 
-        ArrayList<PieceBlok> pieceToPlace = prepareValidMove(selectedBoardBlok,
+        ArrayList<PieceBlok> pieceToPlace = prepareValidMove(playerTurn, selectedBoardBlok,
                 selectedPiece, selectedPieceBlokId, boardState);
         if (pieceToPlace != null) // if true, piece can be placed validly
         {
@@ -831,7 +832,7 @@ public class BlokusGameState extends GameState implements Serializable
         if (selectedPiece != null)
         {
             ArrayList<PieceBlok> pieceToPlace =
-                    prepareValidMove(piecePreview[3][3], selectedPiece,
+                    prepareValidMove(playerTurn, piecePreview[3][3], selectedPiece,
                     selectedPiece.getAnchor().getId(), piecePreview);
             placePiece(pieceToPlace, piecePreview);
         }
@@ -1177,13 +1178,63 @@ public class BlokusGameState extends GameState implements Serializable
                         pieceBlokID = curPieceShape[k].getId();
 
                         // tests placing the piece, testing all rotated and flipped orientations as well
-                        if (testPiecePlacement(curBoardBlok, ap, pieceBlokID, boardState))
+                        if (testPiecePlacement(playerID, curBoardBlok, ap, pieceBlokID, boardState))
                             return true;
                     }
                 }
             }
         }
         return false;
+    }
+
+    public int[] getReducedPlayablePieces(int playerNum, int[] availablePieces, ArrayList<Blok> validCorners)
+    {
+        int[] reducedPieces = new int[21];
+        System.arraycopy(availablePieces, 0, reducedPieces, 0, availablePieces.length);
+
+        Blok curBoardBlok;
+        int pieceBlokID;
+        PieceTemplate ap;
+        PieceBlok[] curPieceShape;
+        boolean canBePlaced;
+
+        //Iterate over avaliable corners
+        if (validCorners != null && !validCorners.isEmpty())
+        {
+            for (int i = 0; i < validCorners.size(); i++) // for each valid corner blok on the board
+            {
+                canBePlaced = false;
+                curBoardBlok = validCorners.get(i);
+                int j;
+                for (j = 0; j < reducedPieces.length; j++) // for each piece the player has
+                {
+                    if (reducedPieces[j] != -1)
+                    {
+                        ap = getPieceFromID(j);
+                        curPieceShape = ap.getPieceShape();
+
+                        for (int k = 0; k < curPieceShape.length; k++) // check each blok on piece
+                        {
+                            pieceBlokID = curPieceShape[k].getId();
+
+                            // tests placing the piece, testing all rotated and flipped orientations as well
+                            if (testPiecePlacement(playerNum, curBoardBlok, ap, pieceBlokID, boardState))
+                            {
+                                canBePlaced = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!canBePlaced)
+                {
+                    reducedPieces[j] = -1;
+                }
+            }
+        }
+
+        return reducedPieces;
     }
 
     /**
@@ -1197,7 +1248,7 @@ public class BlokusGameState extends GameState implements Serializable
      *      false if the given piece cannot be placed with the given conditions
      *      in any orientation
      */
-    private boolean testPiecePlacement(Blok selectedBoardBlok,
+    public boolean testPiecePlacement(int playerNum, Blok selectedBoardBlok,
                                        PieceTemplate selectedPiece,
                                        int pieceBlokId,
                                        Blok[][] board)
@@ -1205,7 +1256,7 @@ public class BlokusGameState extends GameState implements Serializable
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < 4; j++) {
-                if (prepareValidMove(
+                if (prepareValidMove(playerNum,
                         selectedBoardBlok,
                         selectedPiece,
                         pieceBlokId,

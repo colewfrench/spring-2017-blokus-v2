@@ -501,7 +501,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             return;
         }
 
-        if (newState.prepareValidMove(
+        if (newState.prepareValidMove(this.playerNum,
                 blok, piece, pieceBlokId, newState.getBoardState()) != null)
         {
             confirmButton.setBackgroundColor(Color.GREEN);
