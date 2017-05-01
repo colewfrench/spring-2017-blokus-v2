@@ -1,11 +1,5 @@
 package edu.up.cs301.blokus;
 
-/**
- * Created by sterba19 on 4/27/2017.
- */
-
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,15 +14,18 @@ import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
+
 /**
  * The Blokus Advanced Computer Player is more advanced than the
  * simple computer player because it tries to play the largest
  * pieces first so that it can take over more territory
- * and be able to place more pieces in the later game
+ * and be able to place more pieces in the later game.
+ * Pieces are placed at randomly selected valid corners on the
+ * board. The AI will place its selected piece at the first valid
+ * move it can find, and will keep attempting to place pieces
+ * until it finds a valid move.
  *
- * @author Adrian Low
  * @author Cole French
- * @author Devin Ajimine
  * @author Evan Sterba
  */
 public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
@@ -37,16 +34,17 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         AIState checkState(BlokusAdvancedComputerPlayer AI, BlokusGameState state);
     }
 
-    private BlokusGameState gameState;
-    private GameAction curAction;
-    private AIState curState;
-    public int rotateTracker;
-    public int pieceBlokTracker;
-    public int[] playablePieces;
-    private ArrayList<Blok> playableBoardBloks;
-    public boolean firstActionOfTurn;
+    private BlokusGameState gameState; //the received GameState from the LocalGame
+    private GameAction curAction; //the current action that the AI will send to the LocalGame
+    private AIState curState; //the current state in the state machine that the AI is executing
+    public int rotateTracker; //tracks how much the selected piece has been reoriented
+    public int pieceBlokTracker; //tracks which PieceBloks have been attempted on the selected piece
+    public int[] playablePieces; //the piece IDs that the AI has not tried to place yet
+    private ArrayList<Blok> playableBoardBloks; //the board spaces that the AI has not tried yet
+    public boolean firstActionOfTurn; //used to reduce computations on AI's info received
 
-    static Random r;
+    static Random r; //used to get random pieces, and board spaces
+
     /**
      * constructor
      *
@@ -89,7 +87,17 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         }
     }
 
-
+    /**
+     * External Citation
+     * Date: 4/30/2017
+     * Problem: wanted better way to organize AI order of operations
+     *
+     * Resource:
+     *      https://github.com/Team-Pronto-3070/Competition2015/blob/master/
+     *      src/org/usfirst/frc/team3070/robot/ProntoLoader.java
+     *
+     * Solution: I used the code structure from my old robotics team to organize the states
+     */
     enum AIStates implements AIState {
         /*
         on start of turn all ints are set to their initial values
@@ -307,9 +315,11 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         this.playableBoardBloks = validCorners;
     }
 
-    /*
-    remove playable is used to remove bloks that have been tried so that we can now when a piece
-    has been tried at every valid space on the board
+    /**
+     * remove playable is used to remove bloks that have been
+     * tried so that we can know when a piece
+     * has been tried at every valid space on the board
+     * @param unplayableBlok the corresponding Blok to remove from the ArrayList
      */
     public void removePlayableBlok(Blok unplayableBlok)
     {

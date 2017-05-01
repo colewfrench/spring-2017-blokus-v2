@@ -83,7 +83,7 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
     /**
      * External Citation
      * Date: 4/30/2017
-     * Problem: wanted better way to organize AI operations
+     * Problem: wanted better way to organize AI order of operations
      *
      * Resource:
      *      https://github.com/Team-Pronto-3070/Competition2015/blob/master/

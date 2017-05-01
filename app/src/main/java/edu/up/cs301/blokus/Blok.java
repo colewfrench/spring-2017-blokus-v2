@@ -14,7 +14,9 @@ import java.io.Serializable;
 public class Blok implements Serializable{
 
     private static final long serialVersionUID = 492017001L;
-    private int row, col, color, id; // the blok's row and column on the board array
+    private int row, col; // the blok's row and column on the board array
+    private int color; // the blok's color (and corresponding player ID)
+    private int id; // used to determine which PieceBlok a Player wishes to select
 
     public Blok(int row, int col, int color, int id)
     {
