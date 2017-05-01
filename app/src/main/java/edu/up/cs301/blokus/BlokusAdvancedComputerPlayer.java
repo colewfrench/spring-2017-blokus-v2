@@ -42,7 +42,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
     public int[] playablePieces; //the piece IDs that the AI has not tried to place yet
     private ArrayList<Blok> playableBoardBloks; //the board spaces that the AI has not tried yet
     public boolean firstActionOfTurn; //used to reduce computations on AI's info received
-    private int lastPieceIndex = 20;
 
     static Random r; //used to get random board spaces
 
@@ -61,7 +60,6 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
         this.pieceBlokTracker = 0;
         this.rotateTracker = 0;
         this.firstActionOfTurn = true;
-        this.lastPieceIndex = 20;
 
         this.playablePieces = new int[21];
     }

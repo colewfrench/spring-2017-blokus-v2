@@ -24,7 +24,6 @@ import edu.up.cs301.game.GameHumanPlayer;
 import edu.up.cs301.game.GameMainActivity;
 import edu.up.cs301.game.R;
 import edu.up.cs301.game.infoMsg.GameInfo;
-import edu.up.cs301.game.infoMsg.NotYourTurnInfo;
 
 
 /**
@@ -63,6 +62,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     private LinearLayout pieceLayout;
 
     private PieceTemplate selectedPiece = null;
+    private Blok[][] gameBoard = null;
     private Blok[][] previewBoard = null;
     private Blok selectedBoardBlok = null;
     private int selectedPieceBlokID = -1;
@@ -88,14 +88,11 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         if (info instanceof BlokusGameState)
         {
             this.newState = (BlokusGameState)info;
+            this.gameBoard = newState.copyBlokArray(newState.getBoardState());
             this.previewBoard = newState.getPiecePreview();
             this.selectedPiece = newState.getSelectedPiece();
             this.selectedBoardBlok = newState.getSelectedBoardBlok();
             this.selectedPieceBlokID = newState.getSelectedPieceBlokId();
-
-            updateGUIBoard();
-            updatePreviewBoard();
-            updatePieceButtons();
 
             if (newState.getPlayerTurn() == this.playerNum)
             {
@@ -119,11 +116,10 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                 flipButton.setBackgroundColor(Color.RED);
                 confirmButton.setBackgroundColor(Color.RED);
             }
-        }
 
-        if (info instanceof NotYourTurnInfo)
-        {
-            flash(Color.RED, 1000);
+            updateGUIBoard();
+            updatePreviewBoard();
+            updatePieceButtons();
         }
     }
 
@@ -370,6 +366,30 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                 boardButtons[i][j].setColor(newState.getBoardState()[i+1][j+1].getColor());
                 boardButtons[i][j].setImageResource(android.R.color.transparent);
 
+                // display the piece's preview placement on the board
+                switch (gameBoard[i+1][j+1].getColor())
+                {
+                    case 0:
+                        boardButtons[i][j].setBackgroundResource(
+                                R.drawable.player1_blok_preview);
+                        break;
+                    case 1:
+                        boardButtons[i][j].setBackgroundResource(
+                                R.drawable.player2_blok_preview);
+                        break;
+                    case 2:
+                        boardButtons[i][j].setBackgroundResource(
+                                R.drawable.player3_blok_preview);
+                        break;
+                    case 3:
+                        boardButtons[i][j].setBackgroundResource(
+                                R.drawable.player4_blok_preview);
+                        break;
+                    default:
+                        boardButtons[i][j].setBackgroundResource(R.drawable.empty_blok);
+                        break;
+                }
+
                 switch(boardButtons[i][j].getColor())
                 {
                     case 0: // Green
@@ -385,15 +405,6 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                         boardButtons[i][j].setBackgroundResource(R.drawable.player4_blok);
                         break;
                 }
-
-                if (boardButtons[i][j].isSelected())
-                {
-                    displayAsSelectedCorner(boardButtons[i][j], SELECTED_CORNER_PADDING);
-                }
-                else
-                {
-                    boardButtons[i][j].setImageResource(android.R.color.transparent);
-                }
             }
         }
 
@@ -401,8 +412,14 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         //go through the board and check for valid movies
         for (Blok b : newState.getValidCorners(newState.getPlayerTurn()))
         {
+            int row = b.getRow() - 1;
+            int col = b.getColumn() - 1;
+            if (boardButtons[row][col].isSelected())
+            {
+                displayAsSelectedCorner(boardButtons[row][col], SELECTED_CORNER_PADDING);
+            }
             // don't overwrite the selected board square indicator
-            if (!boardButtons[b.getRow()-1][b.getColumn()-1].isSelected())
+            else if (!boardButtons[b.getRow()-1][b.getColumn()-1].isSelected())
             {
                 // decrease by 1 b/c bloks from validMoves are stored on a 22x22 board
                 displayAsValidCorner(boardButtons[b.getRow() - 1][b.getColumn() - 1], 15);
@@ -423,7 +440,6 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         {
             for (int j = 0; j < PREVIEW_BOARD_SIZE; j++)
             {
-                displayButtons[i][j].setBackgroundResource(R.drawable.empty_blok);
                 displayButtons[i][j].setActivated(false);
 
                 switch(previewBoard[i+1][j+1].getColor())
@@ -445,7 +461,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                         displayButtons[i][j].setActivated(true);
                         break;
                     default:
-                        displayButtons[i][j].setBackgroundResource(R.drawable.preview_background_blok);
+                        displayButtons[i][j].setBackgroundResource(
+                                R.drawable.preview_background_blok);
                         break;
                 }
 
@@ -487,23 +504,25 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
      * set the confirm button as green if the player
      * has selected all of the necessary information
      * and the chosen move is valid;
-     * otherwise set the confirm button to be red
+     * otherwise set the confirm button to be red.
+     * Also draws a preview of the move on the 20x20
+     * board if the current move is valid
      */
     private void updateConfirmButton()
     {
-        Blok blok = newState.getSelectedBoardBlok();
-        PieceTemplate piece = newState.getSelectedPiece();
-        int pieceBlokId = newState.getSelectedPieceBlokId();
-
-        if (blok == null || piece == null || pieceBlokId == -1)
+        if (selectedBoardBlok == null ||
+                selectedPiece == null ||
+                selectedPieceBlokID == -1)
         {
             confirmButton.setBackgroundColor(Color.RED);
             return;
         }
 
-        if (newState.prepareValidMove(this.playerNum,
-                blok, piece, pieceBlokId, newState.getBoardState()) != null)
+        ArrayList<PieceBlok> move = newState.prepareValidMove(this.playerNum,
+            selectedBoardBlok, selectedPiece, selectedPieceBlokID, gameBoard);
+        if (move != null)
         {
+            newState.placePiece(move, gameBoard);
             confirmButton.setBackgroundColor(Color.GREEN);
         }
         else
@@ -569,6 +588,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
             int row = this.selectedBoardBlok.getRow();
             int col = this.selectedBoardBlok.getColumn();
 
+            // -1 bc boardButtons is 20x20 and selectedBoardBlok's coordinates
+            // are based on a 22x22 array
             boardButtons[row-1][col-1].setSelected(true);
         }
     }
@@ -591,6 +612,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     //Listener for BoardButtons
     public class BlokButtonListener implements Button.OnClickListener {
 
+        @Override
         public void onClick(View v)
         {
             // one of the buttons on the 20x20 grid
@@ -632,7 +654,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     public class PieceControlListener implements Button.OnClickListener {
 
         public void onClick(View v) {
-            resetSelectedBoardSpaces(displayButtons);
+            //resetSelectedBoardSpaces(displayButtons);
 
             if (v == confirmButton)
             {

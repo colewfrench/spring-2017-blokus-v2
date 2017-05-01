@@ -1,11 +1,5 @@
 package edu.up.cs301.blokus;
 
-/**
- * Created by lowa19 on 3/5/2017.
- */
-
-import android.util.Log;
-
 import edu.up.cs301.blokus.actions.ConfirmPiecePlacementAction;
 import edu.up.cs301.blokus.actions.DoNothingAction;
 import edu.up.cs301.blokus.actions.FlipSelectedPieceAction;
@@ -13,11 +7,9 @@ import edu.up.cs301.blokus.actions.RotateSelectedPieceAction;
 import edu.up.cs301.blokus.actions.SelectBlokOnSelectedPieceAction;
 import edu.up.cs301.blokus.actions.SelectPieceTemplateAction;
 import edu.up.cs301.blokus.actions.SelectValidBlokOnBoardAction;
-import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.GamePlayer;
 import edu.up.cs301.game.LocalGame;
 import edu.up.cs301.game.actionMsg.GameAction;
-import edu.up.cs301.game.actionMsg.MyNameIsAction;
 import edu.up.cs301.game.infoMsg.GameState;
 
 
@@ -47,14 +39,15 @@ BlokusLocalGame extends LocalGame {
     }
 
     /**
-     * This ctor should be called when a new counter game is started
+     * This ctor should be called when a new Blokus game is started
      */
     public BlokusLocalGame() {
         this.gameState = new BlokusGameState();
     }
 
     /**
-     *
+     * execute the appropriate operation on the master gamestate
+     * depending on the given move
      */
     @Override
     protected boolean makeMove(GameAction action) {
@@ -62,23 +55,27 @@ BlokusLocalGame extends LocalGame {
         if (action instanceof FlipSelectedPieceAction) {
             gameState.flipSelectedPiece();
         }
+
         if (action instanceof RotateSelectedPieceAction) {
             gameState.rotateSelectedPiece();
         }
+
         if (action instanceof SelectBlokOnSelectedPieceAction) {
             gameState.selectBlokOnSelectedPiece((SelectBlokOnSelectedPieceAction) action);
         }
+
         if (action instanceof ConfirmPiecePlacementAction) {
             if (gameState.confirmPiecePlacement()) {
                 // piece was successfully placed; go to next player turn
                 gameState.changeToNextPlayer();
-                gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
             }
             // else, current piece cannot be placed, continue current turn
         }
+
         if (action instanceof SelectPieceTemplateAction) {
             gameState.selectPieceTemplate((SelectPieceTemplateAction) action);
         }
+
         if (action instanceof SelectValidBlokOnBoardAction) {
             gameState.selectValidBlokOnBoard((SelectValidBlokOnBoardAction) action);
         }
@@ -86,7 +83,6 @@ BlokusLocalGame extends LocalGame {
         if (action instanceof DoNothingAction) {
             if (((DoNothingAction) action).passMyTurn()) {
                 gameState.changeToNextPlayer();
-                gameState.setValidCorners(gameState.getValidCorners(gameState.getPlayerTurn()));
             }
         }
 

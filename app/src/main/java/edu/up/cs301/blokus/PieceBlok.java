@@ -1,7 +1,5 @@
 package edu.up.cs301.blokus;
 
-import edu.up.cs301.blokus.Blok;
-
 /**
  * This class defines the Blok objects that will constitute
  * a Blokus PieceTemplate object.
@@ -44,10 +42,7 @@ public class PieceBlok extends Blok {
 
     public void setAdjacencies(int[] newAdj)
     {
-        for (int i = 0; i < 4; i++) //iterates through each side of square
-        {
-            this.adjacencies[i] = newAdj[i];
-        }
+        System.arraycopy(newAdj, 0, adjacencies, 0, newAdj.length);
     }
 
     public boolean hasCorner()

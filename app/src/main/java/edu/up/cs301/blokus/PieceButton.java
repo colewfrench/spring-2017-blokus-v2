@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 
-import edu.up.cs301.blokus.pieces.PieceTemplate;
-
 /**
  *  PieceButton class
  *  Image Buttons but with highlight tracking.

@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="highlight_color">#FFFFFF40</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000</color>
     <color name="green">#0F0</color>
@@ -12,5 +13,10 @@
     <color name="player2_color">#FFFFA500</color>
     <color name="player3_color">#FFFF00FF </color>
     <color name="player4_color">#FF89CFF0</color>
+
+    <color name="player1_color_faded">#8000FF00</color>
+    <color name="player2_color_faded">#80FFA500</color>
+    <color name="player3_color_faded">#80FF00FF </color>
+    <color name="player4_color_faded">#8089CFF0</color>
     <color name="previewBoardColorDefault">#FF708090</color>
 </resources>

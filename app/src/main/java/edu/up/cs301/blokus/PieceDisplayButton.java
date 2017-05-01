@@ -1,7 +1,6 @@
 package edu.up.cs301.blokus;
 
 import android.content.Context;
-import android.widget.ImageButton;
 
 /**
  * PieceDisplayButton class

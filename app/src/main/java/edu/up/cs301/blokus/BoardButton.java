@@ -3,8 +3,6 @@ package edu.up.cs301.blokus;
 import android.content.Context;
 import android.widget.ImageButton;
 
-import java.io.Serializable;
-
 /**
  * Class for BoardButtons
  * Image buttons but with row, column, and color tracking
