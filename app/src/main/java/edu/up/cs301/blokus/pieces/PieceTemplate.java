@@ -7,7 +7,7 @@ import edu.up.cs301.blokus.Blok;
 import edu.up.cs301.blokus.PieceBlok;
 
 /**
- * PieceTenmplate class is the template for the 21 pieces it
+ * PieceTemplate class is the template for the 21 pieces it
  * contains methods for all the actions that will be overridden
  * by each piece once their class is implemented
  *

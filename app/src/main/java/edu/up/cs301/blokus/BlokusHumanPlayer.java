@@ -343,7 +343,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         {
             for (int j = 0; j < PREVIEW_BOARD_SIZE; j++)
             {
-                displayButtons[i][j] = new PieceDisplayButton(activity, i, j, false, false);
+                displayButtons[i][j] = new PieceDisplayButton(activity, i, j, false);
                 displayButtons[i][j].setLayoutParams(displayButtonParams);
 
                 displayButtons[i][j].setBackgroundResource(R.drawable.empty_blok);
