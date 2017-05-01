@@ -43,7 +43,7 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
     private ArrayList<Blok> playableBoardBloks; //the board spaces that the AI has not tried yet
     public boolean firstActionOfTurn; //used to reduce computations on AI's info received
 
-    static Random r; //used to get random pieces, and board spaces
+    static Random r; //used to get random board spaces
 
     /**
      * constructor
@@ -97,6 +97,10 @@ public class BlokusAdvancedComputerPlayer extends GameComputerPlayer{
      *      src/org/usfirst/frc/team3070/robot/ProntoLoader.java
      *
      * Solution: I used the code structure from my old robotics team to organize the states
+     */
+    /**
+     * The state machine to control what the AI is attempting to do
+     * at any moment in its turn
      */
     enum AIStates implements AIState {
         /*

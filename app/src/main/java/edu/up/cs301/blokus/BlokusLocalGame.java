@@ -183,6 +183,22 @@ BlokusLocalGame extends LocalGame {
 
         for (int i = 0; i < 4; i++)
         {
+            switch (i)
+            {
+                case 0:
+                    scoreMessage += "[Green] ";
+                    break;
+                case 1:
+                    scoreMessage += "[Orange] ";
+                    break;
+                case 2:
+                    scoreMessage += "[Purple] ";
+                    break;
+                case 3:
+                    scoreMessage += "[Blue] ";
+                    break;
+            }
+
             scoreMessage = scoreMessage + this.playerNames[i] + "'s Score: "
                     + pointsPerPlayer[i] + "\n";
         }

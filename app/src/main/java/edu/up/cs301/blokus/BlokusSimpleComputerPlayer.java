@@ -13,9 +13,7 @@ import edu.up.cs301.blokus.actions.SelectValidBlokOnBoardAction;
 import edu.up.cs301.blokus.pieces.PieceTemplate;
 import edu.up.cs301.game.GameComputerPlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
-import edu.up.cs301.game.actionMsg.MyNameIsAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
-import edu.up.cs301.game.infoMsg.StartGameInfo;
 
 /**
  * @author Cole French
@@ -27,16 +25,17 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state);
     }
 
-    private BlokusGameState gameState;
-    private GameAction curAction;
-    private AIState curState;
-    private boolean firstActionOfTurn;
-    public int rotateTracker;
-    public int pieceBlokTracker;
-    public int[] playablePieces;
-    private ArrayList<Blok> playableBoardBloks;
+    private BlokusGameState gameState; //the received GameState from the LocalGame
+    private GameAction curAction; //the current action that the AI will send to the LocalGame
+    private AIState curState; //the current state in the state machine that the AI is executing
+    public int rotateTracker; //tracks how much the selected piece has been reoriented
+    public int pieceBlokTracker; //tracks which PieceBloks have been attempted on the selected piece
+    public int[] playablePieces; //the piece IDs that the AI has not tried to place yet
+    private ArrayList<Blok> playableBoardBloks; //the board spaces that the AI has not tried yet
+    private boolean firstActionOfTurn; //used to reduce computations on AI's info received
 
-    static Random r;
+    static Random r; //used to get random pieces, and board spaces
+
     /**
      * constructor
      *
@@ -47,12 +46,11 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
         curState = AIStates.SetupStartOfTurn;
         r = new Random();
 
-        this.firstActionOfTurn = true;
-
         this.playableBoardBloks = new ArrayList<>();
 
         this.pieceBlokTracker = 0;
         this.rotateTracker = 0;
+        this.firstActionOfTurn = true;
 
         this.playablePieces = new int[21];
     }
@@ -91,7 +89,15 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
      *
      * Solution: I used the code structure from my old robotics team to organize the states
      */
+    /**
+     * The state machine to control what the AI is attempting to do
+     * at any moment in its turn
+     */
     enum AIStates implements AIState {
+        /**
+         * reset AI's ivars on turn start; this state is only
+         * executed once per turn
+         */
         SetupStartOfTurn {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
@@ -105,6 +111,13 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 return SelectPiece;
             }
         },
+        /**
+         * randomly select a piece; the Simple AI will try placing one
+         * piece at every valid corner until it has tried that piece
+         * at every corner, at which point it will repeat the process
+         * with a new piece chosen randomly. It will never select
+         * the same piece twice in the same turn though.
+         */
         SelectPiece {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
@@ -129,6 +142,13 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 return SelectBoardBlok;
             }
         },
+        /**
+         * randomly select a valid blok on the board. Every time
+         * all orientations of the selected piece have been attempted
+         * and the piece still won't place, it selects a new
+         * spot on the board. It will never select the same spot on the board
+         * twice with the same piece selected.
+         */
         SelectBoardBlok {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
@@ -156,6 +176,12 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 return SelectPieceBlok;
             }
         },
+        /**
+         * iterate through the selected piece's PieceBloks, trying to place
+         * the piece with that PieceBlok selected at the given board space
+         * in every possible orientation. If all PieceBloks have been attempted
+         * at the current board space, select a new board space and repeat
+         */
         SelectPieceBlok {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
@@ -186,6 +212,12 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 return ConfirmPlacement;
             }
         },
+        /**
+         * rotates the selected piece 4 times, then flips it, then
+         * rotates another 4 times. If the piece hasn't been placed
+         * after that, select a new PieceBlok for the current piece
+         * at the current board space
+         */
         Rotate {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)
@@ -222,6 +254,11 @@ public class BlokusSimpleComputerPlayer extends GameComputerPlayer {
                 return ConfirmPlacement;
             }
         },
+        /**
+         * attempt to place the current piece at the current board space.
+         * If successful, reset to prepare for whenever the next turn is.
+         * If unsuccessful, reorient the current piece and try again.
+         */
         ConfirmPlacement {
             @Override
             public AIState checkState(BlokusSimpleComputerPlayer AI, BlokusGameState state)

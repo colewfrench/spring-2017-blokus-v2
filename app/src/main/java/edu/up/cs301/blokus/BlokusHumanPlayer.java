@@ -24,10 +24,16 @@ import edu.up.cs301.game.GameHumanPlayer;
 import edu.up.cs301.game.GameMainActivity;
 import edu.up.cs301.game.R;
 import edu.up.cs301.game.infoMsg.GameInfo;
+import edu.up.cs301.game.infoMsg.NotYourTurnInfo;
 
 
 /**
- * Created by lowa19 on 3/5/2017.
+ * Contains the GUI and behavior definitions for the HumanPlayer
+ *
+ * @author Adrian Low
+ * @author Cole French
+ * @author Devin Ajimine
+ * @author Evan Sterba
  */
 public class BlokusHumanPlayer extends GameHumanPlayer {
 
@@ -74,7 +80,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
     @Override
     public View getTopView() {
-        return activity.findViewById(R.id.top_gui_layout);
+        return activity.findViewById(R.id.boardContainer);
     }
 
     @Override
@@ -113,6 +119,11 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                 flipButton.setBackgroundColor(Color.RED);
                 confirmButton.setBackgroundColor(Color.RED);
             }
+        }
+
+        if (info instanceof NotYourTurnInfo)
+        {
+            flash(Color.RED, 1000);
         }
     }
 
@@ -197,7 +208,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         // create a 20x20 grid of image buttons to use as the board
         initGameBoard(mainBoardLayout);
 
-        // initialize the buttons that allow piece seletion
+        // initialize the buttons that allow piece selection
         initPieceButtons();
 
         // create a 5x5 grid that allows the player
@@ -206,7 +217,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     }
 
     /**
-     *
+     * gets the references to the rotate, flip, and confirm buttons,
+     * and sets their listeners.
      */
     private void initPlayerControlButtons()
     {
@@ -221,6 +233,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     }
 
     /**
+     * setup the 20x20 board of buttons and set all of their listeners
      *
      * @param mainBoardLayout the square layout containing the board
      */
@@ -266,10 +279,10 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
                  *                 on-an-imagebutton-in-android-when-using-a-ontouchlis
                  *
                  *                 https://developer.android.com/reference/android/widget/ImageButton.html
+                 *
                  *      Solution: Used the StackOverflow post code snippet and the ImageButton documentation
-                 *                to learn the correct methods neccessary to fit the image onto the button
+                 *                to learn the correct methods necessary to fit the image onto the button
                  */
-
                 boardButtons[i][j].setBackgroundResource(R.drawable.empty_blok);
                 boardLayouts[i].addView(boardButtons[i][j]);
                 boardButtons[i][j].setOnClickListener(new BlokButtonListener());
@@ -298,7 +311,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     }
 
     /**
-     *
+     * set up the 5x5 board of buttons and set their listeners
      */
     private void initPiecePreviewDisplay()
     {
@@ -342,7 +355,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     }
 
     /**
-     *
+     * update the 20x20 button array to reflect any changes
+     * in the board stored in the GameState
      */
     private void updateGUIBoard()
     {
@@ -397,7 +411,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     }
 
     /**
-     *
+     * update the 5x5 button array to reflect any changes in the
+     * board stored in the GameState
      */
     private void updatePreviewBoard()
     {
@@ -446,6 +461,10 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
+    /**
+     * display only the pieces that the player has not played
+     * yet as available to be placed on the board
+     */
     private void updatePieceButtons()
     {
         pieceLayout.removeAllViews();
@@ -464,6 +483,12 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
+    /**
+     * set the confirm button as green if the player
+     * has selected all of the necessary information
+     * and the chosen move is valid;
+     * otherwise set the confirm button to be red
+     */
     private void updateConfirmButton()
     {
         Blok blok = newState.getSelectedBoardBlok();
@@ -487,6 +512,13 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
+    /**
+     * draws the image on the given button with the
+     * specified padding.
+     *
+     * @param button the button to draw image to
+     * @param padding the padding to apply to the image
+     */
     private void displayAsValidCorner(ImageButton button, int padding)
     {
         button.setImageResource(R.drawable.circle_check);
@@ -494,6 +526,13 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         button.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
+    /**
+     * draws the image on the given button with the
+     * specified padding.
+     *
+     * @param button the button to draw image to
+     * @param padding the padding to apply to the image
+     */
     private void displayAsSelectedCorner(ImageButton button, int padding)
     {
         button.setImageResource(R.drawable.circle_target);
@@ -509,7 +548,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
     }
 
     /**
-     *
+     * de-selects all buttons on the given array of buttons
+     * (either the preview board or the game board)
      */
     private void resetSelectedBoardSpaces(BoardButton[][] targetBoard)
     {
@@ -588,6 +628,7 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
+    // Listener for the buttons to orient or place a piece on the board
     public class PieceControlListener implements Button.OnClickListener {
 
         public void onClick(View v) {
@@ -617,13 +658,14 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
         }
     }
 
-    //PieceButtonListener is used by PieceButtons to highlight on click
+    //Listener for the buttons used to select a piece
     public class PieceButtonListener implements Button.OnClickListener {
 
         public void onClick(View v) {
             resetSelectedBoardSpaces(displayButtons);
 
-            if (((PieceButton)v).isHighlighted()) //if the button selected is already highlighted
+            //if the button selected is already highlighted
+            if (((PieceButton)v).isHighlighted())
             {
                 v.setBackgroundResource(R.drawable.button_border);
                 ((PieceButton) v).setIsHighlighted(false);
@@ -633,7 +675,8 @@ public class BlokusHumanPlayer extends GameHumanPlayer {
 
                 game.sendAction(sel);
             }
-            else if( !((PieceButton) v).isHighlighted() && ((PieceButton) v).getButtonPiece() != -1) //if the button selected is not highlighted
+            //if the button selected is not highlighted
+            else if( !((PieceButton) v).isHighlighted() && ((PieceButton) v).getButtonPiece() != -1)
             {
                 resetHighlightedPieceButtons(); //unhighlight other buttons
 

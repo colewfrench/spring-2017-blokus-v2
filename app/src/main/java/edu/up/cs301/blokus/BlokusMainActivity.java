@@ -26,9 +26,9 @@ public class BlokusMainActivity extends GameMainActivity {
 
     /**
      * Create the default configuration for this game:
-     * - one human player vs. one computer player
-     * - minimum of 1 player, maximum of 2
-     * - one kind of computer player and one kind of human player available
+     * - one human player vs. three simple computer players
+     * - minimum of 4 players, maximum of 4
+     * - two kinds of computer players and one kind of human player available
      *
      * @return
      * 		the new configuration object, representing the default configuration
