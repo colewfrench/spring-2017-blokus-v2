@@ -9,7 +9,7 @@ import edu.up.cs301.blokus.pieces.PieceTemplate;
 /**
  *  PieceButton class
  *  Image Buttons but with highlight tracking.
- *  More functionality to be added later
+ *  used to select pieces to view on the preview screen and play
  *
  * @author Cole French
  * @author Evan Sterba
@@ -35,7 +35,7 @@ public class PieceButton extends ImageButton {
     {
         super(context, attrs, defStyleAttr);
     }
-
+    //getters and setters
     public void setIsHighlighted(boolean h)
     {
         this.isHighlighted = h;
@@ -45,10 +45,12 @@ public class PieceButton extends ImageButton {
     {
         return this.isHighlighted;
     }
+
     public int getButtonPiece()
     {
         return this.buttonPiece;
     }
+
     public void setButtonPiece(int pieceID)
     {
         this.buttonPiece = pieceID;

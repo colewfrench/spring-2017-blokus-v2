@@ -4,27 +4,29 @@ import android.content.Context;
 import android.widget.ImageButton;
 
 /**
- * Created by frenchco19 on 3/25/2017.
+ * PieceDisplayButton class
+ * used to create 'preview window' for gameplay purposes
+ *
+ * @author Adrian Low
+ * @author Cole French
+ * @author Devin Ajimine
+ * @author Evan Sterba
  */
 
-public class PieceDisplayButton extends BoardButton {
-
-    private boolean isActive;
-
+public class PieceDisplayButton extends BoardButton
+{
+    /**
+     * constructor
+     *
+     * @param context context
+     * @param initRow row of button
+     * @param initCol column of button
+     * @param initSelected if the button is selected or not
+     *
+     */
     public PieceDisplayButton(Context context, int initRow, int initCol,
-                              boolean initSelected, boolean initActive) {
+                              boolean initSelected)
+    {
         super(context, initRow, initCol, initSelected);
-
-        this.isActive = initActive;
-    }
-
-    public boolean isActive()
-    {
-        return this.isActive;
-    }
-
-    public void setActive(boolean s)
-    {
-        this.isActive = s;
-    }
+    }//ctor
 }
